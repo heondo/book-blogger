@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Container, FormControl, InputLabel, Input, FormHelperText } from '@material-ui/core';
+import googleKey from './../../../google_key.json';
 
 export default function AddReview(props) {
   let typingTimer;
-  let doneTypingInterval = 3000;
+  let doneTypingInterval = 2500;
+  const [matchedBooks, setMatchedBooks] = useState(null);
+
+  useEffect(() => {
+    // console.log(googleKey);
+  });
 
   const getBooks = search => {
-    // https://www.googleapis.com/books/v1/volumes?q=intitle:flowers+intitle:for+intitle:algernon&key=AIzaSyCWq6apxh7IJs8njuJgCEJf5QPenKjrCYc
     let query = '';
     search.split(' ').forEach((term, index, arr) => {
       (index === arr.length) ? query += `intitle:${term}` : query += `intitle:${term}+`;
     });
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=yourAPIKey`);
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=${googleKey.GOOGLE_KEY}`)
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
   };
 
   const findMatchingBooks = event => {
