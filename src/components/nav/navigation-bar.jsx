@@ -5,9 +5,6 @@ import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/co
 import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles(theme => ({
-  appbar: {
-    marginBottom: '.5rem'
-  },
   toolbar: {
     backgroundColor: 'lightblue'
   },
@@ -24,7 +21,7 @@ export default function NavigationBar(props) {
   const classes = useStyles();
 
   return (
-    <AppBar className={classes.appbar} position="static">
+    <AppBar position="static">
       <Toolbar className={classes.toolbar}>
         <IconButton edge="start">
           <MenuIcon />

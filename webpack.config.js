@@ -43,7 +43,7 @@ module.exports = {
       '/api': {
         target: 'http://localhost:4001',
         headers: {
-          Host: 'final-project.localhost'
+          Host: 'book-blogger.localhost'
         }
       }
     }

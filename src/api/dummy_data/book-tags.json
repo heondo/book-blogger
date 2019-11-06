@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "tag": "Self Help"
+  },
+  {
+    "id": 2,
+    "tag": "History"
+  },
+  {
+    "id": 3,
+    "tag": "Difficult Read"
+  },
+  {
+    "id": 4,
+    "tag": "Good Reread"
+  },
+  {
+    "id": 5,
+    "tag": "Fiction"
+  },
+  {
+    "id": 6,
+    "tag": "Non-fiction"
+  },
+  {
+    "id": 7,
+    "tag": "Mystery"
+  },
+  {
+    "id": 8,
+    "tag": "Thriller"
+  },
+  {
+    "id": 9,
+    "tag": "Biography"
+  },
+  {
+    "id": 10,
+    "tag": "Fantasy"
+  }
+]

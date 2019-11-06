@@ -2,3 +2,4 @@
 google_key.json
 /node_modules
 /src/api/node_modules
+/src/api/mysql_creds.js
