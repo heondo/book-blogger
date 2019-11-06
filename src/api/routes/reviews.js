@@ -4,6 +4,12 @@ const db = require('./../db_connection');
 
 router.use(express.json());
 
+router.get('/', (req, res, next) => {
+  // this is just getting the relavant information for the home page of reviews;
+  // necessary information, book title, authors, review date, user name, description, review, user_id, review_id,
+
+});
+
 router.post('/', (req, res, next) => {
   const { book, review, tags, userID } = req.body;
   let insertReviewID;
@@ -16,6 +22,8 @@ router.post('/', (req, res, next) => {
       res.status(500);
       return next(err);
     }
+    // build query to get information from google about the books. some things have to be concatenated and what not
+    // but that is because the user is not going to be editing this information anytime soon
     let addBookQuery = 'INSERT IGNORE INTO `book`(`id`, `authors`, `title`, `images`, `links`, `publisher`, `publish_date`, `lang`, `description`, `page_count`, `price`, `currency`, `categories`, `average_rating`, `rating_count`) VALUES (';
     const { title, publisher, publishedDate, description, pageCount, averageRating, ratingsCount, language, authors, categories, imageLinks, previewLink, infoLink, canonicalVolumeLink } = volumeInfo || undefined;
     const { listPrice, retailPrice } = saleInfo || undefined;
@@ -46,7 +54,7 @@ router.post('/', (req, res, next) => {
         res.status(500);
         return next(err);
       }
-      let addReviewQuery = 'INSERT INTO `review`(`user_id`, `book_id`, `review`) VALUES (?, ?, ?)';
+      let addReviewQuery = 'INSERT INTO `review`(`user_id`, `book_id`, `review`, `upload_date`) VALUES (?, ?, ?, UNIX_TIMESTAMP())';
       db.query(addReviewQuery, [userID, id, review], (err, insertReviewData) => {
         if (err) {
           res.status(500);

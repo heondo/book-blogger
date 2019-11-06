@@ -33,6 +33,9 @@ export default function AddReview(props) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
   const [reviewInput, setReviewInput] = useState('');
+  const [bookInvalid, setBookInvalid] = useState(false);
+  const [tagsInvalid, setTagsInvalid] = useState(false);
+  const [reviewInvalid, setReviewInvalid] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -60,7 +63,7 @@ export default function AddReview(props) {
   const getBooks = search => {
     let query = '';
     search.split(' ').forEach((term, index, arr) => {
-      (index === arr.length) ? query += `intitle:${term}` : query += `intitle:${term}+`;
+      (index === arr.length) ? query += `${term}` : query += `${term}+`;
     });
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=${googleKey.GOOGLE_KEY}`)
       .then(res => res.json())
@@ -70,16 +73,36 @@ export default function AddReview(props) {
 
   const findMatchingBooks = event => {
     clearTimeout(typingTimer);
+    setBookInvalid(false);
     const searchTerm = event.target.value;
     if (searchTerm) {
       typingTimer = setTimeout(() => { getBooks(searchTerm); }, doneTypingInterval);
     }
   };
 
+  const handleBookEnter = e => {
+    const key = e.key;
+    const search = e.target.value;
+    if (key === 'Enter') {
+      clearTimeout(typingTimer);
+      getBooks(search);
+    }
+  };
+
   const uploadReview = () => {
+    if (!selectedBook.id) {
+      setBookInvalid(true);
+      return;
+    } else if (!selectedTags.length) {
+      setTagsInvalid(true);
+      return;
+    } else if (!reviewInput) {
+      setReviewInvalid(true);
+      return;
+    }
     // something happens here
     const body = JSON.stringify({
-      userID: 1,
+      userID: props.user.id,
       book: selectedBook,
       review: reviewInput,
       tags: selectedTags
@@ -108,17 +131,12 @@ export default function AddReview(props) {
           <TextField
             {...params}
             variant="outlined"
+            error={bookInvalid}
             label="Search for a book"
             className={classes.autocomplete}
             onKeyUp={findMatchingBooks}
-            onKeyPress={e => {
-              const key = e.key;
-              const search = e.target.value;
-              if (key === 'Enter') {
-                clearTimeout(typingTimer);
-                getBooks(search);
-              }
-            }}
+            onKeyPress={handleBookEnter}
+            helperText={bookInvalid ? 'Must enter a valid book' : ''}
           />
         )}
         renderOption={option => {
@@ -199,6 +217,11 @@ export default function AddReview(props) {
           <TextField
             {...params}
             freeSolo
+            onChange={() => {
+              setTagsInvalid(false);
+            }}
+            error={tagsInvalid}
+            helperText={tagsInvalid ? 'Please enter at least one tag' : ''}
             label="Book Tags"
             className={classes.bookTags}
           />
@@ -207,6 +230,8 @@ export default function AddReview(props) {
       <TextField
         id="review-text"
         className={classes.reviewText}
+        error={reviewInvalid}
+        helperText={reviewInvalid ? 'Without a book review what even is this :(' : ''}
         variant="standard"
         multiline
         rowsMax="7"
@@ -214,6 +239,7 @@ export default function AddReview(props) {
         placeholder="Why do you think others should read this book, or why shouldn't they..."
         onChange={e => {
           let text = e.target.value;
+          setReviewInvalid(false);
           setReviewInput(text);
         }}
       />
