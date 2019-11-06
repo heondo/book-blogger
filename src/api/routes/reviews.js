@@ -7,65 +7,84 @@ router.use(express.json());
 router.post('/', (req, res, next) => {
   const { book, review, tags, userID } = req.body;
   let insertReviewID;
+  // id is a very special one, the BOOK id that google gave it
+  const { id, volumeInfo, saleInfo, accessInfo } = book;
   const reviewTagIDs = [];
   // begin transaction
   db.beginTransaction(err => {
     if (err) {
       res.status(500);
-      next(err);
+      return next(err);
     }
-    // MUST ADD BOOK BEFORE THIS ADD REVIEW QUERY
-    // db.query(addBookQuery, [book information will all go in here], (err, data) => {
-    //   if (err) {
-    //     res.status(500);
-    //     next(err);
-    //   }
-    //   // after adding the book is successful and you have the book ID RIGHT HERE then do the stuff below with some minor changes
-    // })
-
-    // segment to run inside of the addBookQuery callback after success
-    let addReviewQuery = 'INSERT INTO `review`(`user_id`, `book_info`, `review`) VALUES (?, ?, ?)';
-    // query to add a user review into the database, must stringify the json book object for now....not sure if I have to deal with this a separate way
-
-    db.query(addReviewQuery, [userID, JSON.stringify(book), review], (err, insertReviewData) => {
+    let addBookQuery = 'INSERT IGNORE INTO `book`(`id`, `authors`, `title`, `images`, `links`, `publisher`, `publish_date`, `lang`, `description`, `page_count`, `price`, `currency`, `categories`, `average_rating`, `rating_count`) VALUES (';
+    const { title, publisher, publishedDate, description, pageCount, averageRating, ratingsCount, language, authors, categories, imageLinks, previewLink, infoLink, canonicalVolumeLink } = volumeInfo || undefined;
+    const { listPrice, retailPrice } = saleInfo || undefined;
+    let price;
+    let currency;
+    if (listPrice) {
+      price = listPrice.amount;
+      currency = listPrice.currencyCode;
+    } else if (retailPrice) {
+      price = retailPrice.amount;
+      currency = retailPrice.currencyCode;
+    }
+    const productLinks = JSON.stringify({
+      previewLink,
+      infoLink,
+      canonicalVolumeLink
+    });
+    const authorsString = authors ? volumeInfo.authors.join(', ') : undefined;
+    const categoriesString = categories ? volumeInfo.authors.join(', ') : undefined;
+    const imagesJSON = imageLinks ? JSON.stringify(volumeInfo.imageLinks) : undefined;
+    const addBookPrepareValues = [id, authorsString, title, imagesJSON, productLinks, publisher, publishedDate, language, description, pageCount, price, currency, categoriesString, averageRating, ratingsCount];
+    // add on duplicate key update logic here
+    addBookPrepareValues.forEach((q, index, arr) => {
+      addBookQuery += (index === arr.length - 1) ? '?)' : '?, ';
+    });
+    db.query(addBookQuery, addBookPrepareValues, (err, data) => {
       if (err) {
         res.status(500);
         return next(err);
       }
-      insertReviewID = insertReviewData.insertId;
-      tags.forEach(tag => {
-        if (typeof tag === 'object') {
-          reviewTagIDs.push(tag.id);
+      let addReviewQuery = 'INSERT INTO `review`(`user_id`, `book_id`, `review`) VALUES (?, ?, ?)';
+      db.query(addReviewQuery, [userID, id, review], (err, insertReviewData) => {
+        if (err) {
+          res.status(500);
+          return next(err);
         }
-      });
-      const newTags = tags.filter(tag => typeof tag === 'string');
-      if (newTags.length) {
-        let makeNewTagsQuery = 'INSERT IGNORE INTO `tag`(`tag`) VALUES ';
-        let getNewTagsQuery = 'SELECT * FROM `tag` WHERE `tag` IN (';
-        newTags.forEach((tag, index) => {
-          makeNewTagsQuery += (index === newTags.length - 1) ? '(UPPER(?))' : '(UPPER(?)), ';
-          getNewTagsQuery += (index === newTags.length - 1) ? 'UPPER(?))' : 'UPPER(?),';
-        });
-        db.query(makeNewTagsQuery, newTags, (err, data) => {
-          if (err) {
-            res.status(500);
-            return next(err);
+        insertReviewID = insertReviewData.insertId;
+        tags.forEach(tag => {
+          if (typeof tag === 'object') {
+            reviewTagIDs.push(tag.id);
           }
-          db.query(getNewTagsQuery, newTags, (err, data) => {
+        });
+        const newTags = tags.filter(tag => typeof tag === 'string');
+        if (newTags.length) {
+          let makeNewTagsQuery = 'INSERT IGNORE INTO `tag`(`tag`) VALUES ';
+          let getNewTagsQuery = 'SELECT * FROM `tag` WHERE `tag` IN (';
+          newTags.forEach((tag, index) => {
+            makeNewTagsQuery += (index === newTags.length - 1) ? '(UPPER(?))' : '(UPPER(?)), ';
+            getNewTagsQuery += (index === newTags.length - 1) ? 'UPPER(?))' : 'UPPER(?),';
+          });
+          db.query(makeNewTagsQuery, newTags, (err, data) => {
             if (err) {
               res.status(500);
               return next(err);
             }
-            data.forEach(tag => { reviewTagIDs.push(tag.id); });
-            makeReviewTags(insertReviewID, reviewTagIDs, res, next);
+            db.query(getNewTagsQuery, newTags, (err, data) => {
+              if (err) {
+                res.status(500);
+                return next(err);
+              }
+              data.forEach(tag => { reviewTagIDs.push(tag.id); });
+              makeReviewTags(insertReviewID, reviewTagIDs, res, next);
+            });
           });
-        });
-      } else {
-        makeReviewTags(insertReviewID, reviewTagIDs, res, next);
-      }
+        } else {
+          makeReviewTags(insertReviewID, reviewTagIDs, res, next);
+        }
+      });
     });
-    // I think you can just run the above segment after the addbookQuery fails or succeeds
-
   });
 });
 
