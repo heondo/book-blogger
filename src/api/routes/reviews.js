@@ -8,12 +8,25 @@ router.post('/', (req, res, next) => {
   const { book, review, tags, userID } = req.body;
   let insertReviewID;
   const reviewTagIDs = [];
+  // begin transaction
   db.beginTransaction(err => {
     if (err) {
       res.status(500);
       next(err);
     }
+    // MUST ADD BOOK BEFORE THIS ADD REVIEW QUERY
+    // db.query(addBookQuery, [book information will all go in here], (err, data) => {
+    //   if (err) {
+    //     res.status(500);
+    //     next(err);
+    //   }
+    //   // after adding the book is successful and you have the book ID RIGHT HERE then do the stuff below with some minor changes
+    // })
+
+    // segment to run inside of the addBookQuery callback after success
     let addReviewQuery = 'INSERT INTO `review`(`user_id`, `book_info`, `review`) VALUES (?, ?, ?)';
+    // query to add a user review into the database, must stringify the json book object for now....not sure if I have to deal with this a separate way
+
     db.query(addReviewQuery, [userID, JSON.stringify(book), review], (err, insertReviewData) => {
       if (err) {
         res.status(500);
@@ -51,6 +64,8 @@ router.post('/', (req, res, next) => {
         makeReviewTags(insertReviewID, reviewTagIDs, res, next);
       }
     });
+    // I think you can just run the above segment after the addbookQuery fails or succeeds
+
   });
 });
 
