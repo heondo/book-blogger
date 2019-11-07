@@ -1,0 +1,152 @@
+// Query to get the tags for all reviews
+SELECT
+    `review_id`,
+    GROUP_CONCAT(t.`tag`) AS tag_array
+FROM
+    `review_tag` AS rt
+JOIN
+    `tag` AS t
+ON
+    rt.`tag_id` = t.`id`
+GROUP BY
+    `review_id`;
+
+// Particular review
+SELECT
+    `id` AS user_id,
+    JSON_OBJECT(
+        'email',
+        `email`,
+    SELECT
+        `review_id`,
+        GROUP_CONCAT(t.`tag`) AS tag_array
+    FROM
+        `review_tag` AS rt
+    JOIN
+        `tag` AS t
+    ON
+        rt.`tag_id` = t.`id`
+    WHERE
+        `review_id` = ?
+    GROUP BY
+        `review_id`; 'first',
+        `first`,
+        'last',
+        `last`
+    ) AS user_info
+FROM
+    `user`;
+
+// Get userinfo as a JSON object
+SELECT
+    `id` AS user_id,
+    JSON_OBJECT(
+        'email',
+        `email`,
+        'first',
+        `first`,
+        'last',
+        `last`
+    ) AS user_info
+FROM
+    `user`;
+
+// Get specific user info with json object of their info
+SELECT
+    `id` AS user_id,
+    JSON_OBJECT(
+        'email',
+        `email`,
+        'first',
+        `first`,
+        'last',
+        `last`
+    ) AS user_info
+FROM
+    `user`
+WHERE
+    `id` = ?;
+
+// Get information about the books, basic level
+SELECT
+    `id` AS book_id,
+    JSON_OBJECT(
+        'authors',
+        `authors`,
+        'title',
+        `title`,
+        'images',
+        `images`,
+        'description',
+        `description`
+    ) AS book_info
+FROM
+    `book`
+
+//Getting all reviews from database with the associated tag array. Get book information, then user information
+SELECT
+    r.`id`,
+    r.`user_id`,
+    r.`review`,
+    r.`upload_date`,
+    b.`book_info`,
+    u.`user_info`,
+    review_tags.`tag_array`
+FROM
+    `review` AS r
+JOIN
+    (
+    SELECT
+        `review_id`,
+        GROUP_CONCAT(t.`tag`) AS tag_array
+    FROM
+        `review_tag` AS rt
+    JOIN
+        `tag` AS t
+    ON
+        rt.`tag_id` = t.`id`
+    GROUP BY
+        `review_id`
+) AS review_tags
+ON
+    review_tags.`review_id` = r.`id`
+JOIN
+    (
+    SELECT
+        `id` AS user_id,
+        JSON_OBJECT(
+            'email',
+            `email`,
+            'first',
+            `first`,
+            'last',
+            `last`
+        ) AS user_info
+    FROM
+        `user`
+) AS u
+ON
+    u.`user_id` = r.`user_id`
+JOIN
+    (
+    SELECT
+        `id` AS book_id,
+        JSON_OBJECT(
+            'authors',
+            `authors`,
+            'title',
+            `title`,
+            'images',
+            `images`,
+            'description',
+            `description`
+        ) AS book_info
+    FROM
+        `book`
+) AS b
+ON
+    b.`book_id` = r.`book_id`
+ORDER BY
+    r.`upload_date`
+DESC
+LIMIT 50

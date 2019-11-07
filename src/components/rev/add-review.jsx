@@ -107,14 +107,13 @@ export default function AddReview(props) {
       review: reviewInput,
       tags: selectedTags
     });
-    console.log(body);
     fetch('/api/reviews', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body
     })
       .then(res => res.json())
-      .then(res => console.log(res))
+      .then(res => console.log('Make this go to the book review page after'))
       .catch(err => console.error(err));
   };
 

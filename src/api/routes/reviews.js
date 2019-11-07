@@ -6,8 +6,28 @@ router.use(express.json());
 
 router.get('/', (req, res, next) => {
   // this is just getting the relavant information for the home page of reviews;
-  // necessary information, book title, authors, review date, user name, description, review, user_id, review_id,
-
+  // necessary information, book title, authors, review date, user name, description, review, user_id, review_id
+  // I need information from basically every table. First get review tags joined with the tags into an array and group by the review id;
+  // then get the book information that you need and make it a json but thats not even necessary;
+  // then get the single review, get the book information and the review tags information. Join user id.
+  let getReviewsListQuery = "SELECT r.`id`, r.`user_id`, r.`review`, r.`upload_date`, b.`book_info`, u.`user_info`, review_tags.`tag_array` FROM `review` AS r JOIN ( SELECT `review_id`, GROUP_CONCAT(t.`tag`) AS tag_array FROM `review_tag` AS rt JOIN `tag` AS t ON rt.`tag_id` = t.`id` GROUP BY `review_id` ) AS review_tags ON review_tags.`review_id` = r.`id` JOIN ( SELECT `id` AS user_id, JSON_OBJECT( 'email', `email`, 'first', `first`, 'last', `last` ) AS user_info FROM `user` ) AS u ON u.`user_id` = r.`user_id` JOIN ( SELECT `id` AS book_id, JSON_OBJECT( 'authors', `authors`, 'title', `title`, 'images', `images`, 'description', `description`) AS book_info FROM `book` ) AS b ON b.`book_id` = r.`book_id` ORDER BY r.`upload_date` DESC LIMIT 50";
+  db.query(getReviewsListQuery, (err, data) => {
+    if (err) {
+      res.status(500);
+      return next(err);
+    }
+    data.forEach(review => {
+      review.tag_array = review.tag_array.split(',');
+      review.book_info = JSON.parse(review.book_info);
+      review.user_info = JSON.parse(review.user_info);
+      review.book_info.images = review.book_info.images ? JSON.parse(review.book_info.images) : null;
+      review.book_info.authors = review.book_info.authors ? review.book_info.authors.split(',') : null;
+    });
+    res.status(200).json({
+      success: true,
+      reviews: data
+    });
+  });
 });
 
 router.post('/', (req, res, next) => {
@@ -41,9 +61,9 @@ router.post('/', (req, res, next) => {
       infoLink,
       canonicalVolumeLink
     });
-    const authorsString = authors ? volumeInfo.authors.join(', ') : undefined;
-    const categoriesString = categories ? volumeInfo.authors.join(', ') : undefined;
-    const imagesJSON = imageLinks ? JSON.stringify(volumeInfo.imageLinks) : undefined;
+    const authorsString = authors ? authors.join(',') : undefined;
+    const categoriesString = categories ? categories.join(',') : undefined;
+    const imagesJSON = imageLinks ? JSON.stringify(imageLinks) : undefined;
     const addBookPrepareValues = [id, authorsString, title, imagesJSON, productLinks, publisher, publishedDate, language, description, pageCount, price, currency, categoriesString, averageRating, ratingsCount];
     // add on duplicate key update logic here
     addBookPrepareValues.forEach((q, index, arr) => {
