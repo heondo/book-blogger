@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Typography, Paper, makeStyles, Box } from '@material-ui/core';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 
 const useStyles = makeStyles(theme => ({
@@ -11,13 +11,17 @@ const useStyles = makeStyles(theme => ({
   },
   description: {
     display: '-webkit-box',
-    WebkitLineClamp: '3',
+    WebkitLineClamp: '2',
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
-  bookInfo: {
-    maxHeight: '200px'
+  reviewText: {
+    display: '-webkit-box',
+    WebkitLineClamp: '3',
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   bookMarkIcon: {
     position: 'absolute',
@@ -26,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   imageThumbnail: {
     objectFit: 'contain',
+    maxHeight: '175px',
     height: '100%',
     width: '100%'
   }
@@ -39,21 +44,33 @@ export default function ReviewListItem(props) {
 
   return (
     <Paper className={classes.reviewContainer}>
-      <Grid className={classes.bookInfo} container item xs={12} spacing={1}>
-        <Grid container justify="center" item xs={2}>
+      <Grid container item xs={12} spacing={1}>
+        <Grid container justify="center" item xs={3} sm={2}>
           <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here"/>
         </Grid>
-        <Grid container item xs={10} spacing={1}>
+        <Grid container item xs={9} sm={10} spacing={1}>
           <Grid container item xs={12} direction="column">
-            <Typography variant="h6">
-              {title}
-            </Typography>
-            <Typography variant="subtitle2">
-              {authors.join(', ')}
-            </Typography>
-            <Typography variant="subtitle1" className={classes.description}>
-              {description}
-            </Typography>
+            <Box>
+              <Typography variant="h6">
+                {title}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="subtitle2">
+                {authors.join(', ')}
+              </Typography>
+            </Box>
+            <Box className={classes.description}>
+              <Typography variant="subtitle2">
+                {description}
+              </Typography>
+            </Box>
+            <Box className={classes.reviewText}>
+              <Typography >
+              Review By: <br/> {review}
+              </Typography>
+            </Box>
+            Read Full Review
           </Grid>
         </Grid>
       </Grid>
