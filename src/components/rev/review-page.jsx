@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Container, Paper, Grid, makeStyles, Box, Typography, Chip } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
-import StarHalf from '@material-ui/icons/StarHalf';
+import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
 
 const useStyles = makeStyles(theme => ({
@@ -55,16 +54,16 @@ export default function ReviewPage(props) {
       .catch(error => console.error(error));
   };
 
-  const convertRatingToStars = rating => {
-    const wholeRatings = Math.floor(rating);
-    let stars = [...Array(wholeRatings)].map((star, index) => (
-      <StarIcon fontSize="small" key={index} />
-    ));
-    if (!Number.isInteger(rating)) {
-      stars.push(<StarHalf fontSize="small"/>);
-    }
-    return stars;
-  };
+  // const convertRatingToStars = rating => {
+  //   const wholeRatings = Math.floor(rating);
+  //   let stars = [...Array(wholeRatings)].map((star, index) => (
+  //     <StarIcon fontSize="small" key={index} />
+  //   ));
+  //   if (!Number.isInteger(rating)) {
+  //     stars.push(<StarHalf fontSize="small"/>);
+  //   }
+  //   return stars;
+  // };
 
   return (!isLoaded)
     ? (
@@ -94,9 +93,10 @@ export default function ReviewPage(props) {
                 </Box>
                 <Box>
                   <Grid container item alignItems="center">
-                    {convertRatingToStars(review.book_info.average_rating)}
+                    {/* {convertRatingToStars(review.book_info.average_rating)} */}
+                    <Rating value={review.book_info.average_rating} precision={0.5} />
                     <Typography style={{ marginLeft: '.2rem' }}>
-                        of 5 and {review.book_info.rating_count} ratings
+                      {` out of `}{review.book_info.rating_count} ratings
                     </Typography>
                   </Grid>
                 </Box>
@@ -107,9 +107,10 @@ export default function ReviewPage(props) {
                 </Box>
                 <Box display={{ xs: 'none', sm: 'block' }}>
                   <Box>
-                    {review.tag_array.map((tag, index) => (
+
+                    {/* {review.tag_array.map((tag, index) => (
                       <Chip key={index} label={tag} style={{ marginRight: '.2rem' }}></Chip>
-                    ))}
+                    ))} */}
                   </Box>
                   <Box>
                     <Typography>
