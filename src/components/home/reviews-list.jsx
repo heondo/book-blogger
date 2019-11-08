@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, FormRow } from '@material-ui/core';
+import LoadingCircle from './../helper/loading-circle';
 import ReviewListItem from './review-list-item';
 
 export default function ReviewsList(props) {
   const [reviews, setReviews] = useState([]);
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -14,7 +16,6 @@ export default function ReviewsList(props) {
     return function cleanup() {
       abortController.abort();
     };
-    // console.log(googleKey);
   }, []);
 
   const handleGetReviews = signal => {
@@ -25,13 +26,16 @@ export default function ReviewsList(props) {
           throw new Error(res.message);
         } else {
           setReviews(res.reviews);
+          setReviewsLoaded(prev => !prev);
         }
       })
       .catch(err => console.error(err));
   };
 
-  return (
-    <Container className="reviews-list">
+  return (!reviewsLoaded) ? (
+    <LoadingCircle />
+  ) : (
+    <Container>
       {
         (reviews.length)
           ? reviews.map(review => (

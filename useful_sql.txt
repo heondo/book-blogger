@@ -150,3 +150,95 @@ ORDER BY
     r.`upload_date`
 DESC
 LIMIT 50
+
+// Single Review Full Book information
+SELECT
+    r.`id`,
+    r.`user_id`,
+    r.`review`,
+    r.`upload_date`,
+    b.`book_info`,
+    u.`user_info`,
+    review_tags.`tag_array`
+FROM
+    `review` AS r
+JOIN
+    (
+    SELECT
+        `review_id`,
+        GROUP_CONCAT(t.`tag`) AS tag_array
+    FROM
+        `review_tag` AS rt
+    JOIN
+        `tag` AS t
+    ON
+        rt.`tag_id` = t.`id`
+    WHERE
+        `review_id` = 6
+    GROUP BY
+        `review_id`
+) AS review_tags
+ON
+    review_tags.`review_id` = r.`id`
+JOIN
+    (
+    SELECT
+        `id` AS user_id,
+        JSON_OBJECT(
+            'email',
+            `email`,
+            'first',
+            `first`,
+            'last',
+            `last`
+        ) AS user_info
+    FROM
+        `user`
+) AS u
+ON
+    u.`user_id` = r.`user_id`
+JOIN
+    (
+    SELECT
+        `id` AS book_id,
+        JSON_OBJECT(
+            'authors',
+            `authors`,
+            'title',
+            `title`,
+            'images',
+            `images`,
+            'description',
+            `description`,
+            'price',
+            `price`,
+            'currency',
+            `currency`,
+            'links',
+            `links`,
+            'publisher',
+            `publisher`,
+            'publish_date',
+            `publish_date`,
+            'lang',
+            `lang`,
+            'page_count',
+            `page_count`,
+            'categories',
+            `categories`,
+            'average_rating',
+            `average_rating`,
+            'rating_count',
+            `rating_count`
+        ) AS book_info
+    FROM
+        `book`
+) AS b
+ON
+    b.`book_id` = r.`book_id`
+WHERE
+    r.`id` = 6
+ORDER BY
+    r.`upload_date`
+DESC
+LIMIT 50
