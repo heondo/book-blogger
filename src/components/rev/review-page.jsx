@@ -48,6 +48,9 @@ export default function ReviewPage(props) {
     fetch(`/api/reviews/${reviewID}`, { signal })
       .then(res => res.json())
       .then(res => {
+        if (res.message === `${reviewID} NA`) {
+          throw new Error('No data available');
+        }
         setReview(res.review);
         setIsLoaded(prev => !prev);
       })
