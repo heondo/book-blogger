@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Comments from './comments';
 import moment from 'moment';
 import { Container, Paper, Grid, makeStyles, Box, Typography, Chip } from '@material-ui/core';
+import ShopIcon from '@material-ui/icons/Shop';
 import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
+import { typography } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   paperContainer: {
@@ -110,10 +113,9 @@ export default function ReviewPage(props) {
                 </Box>
                 <Box display={{ xs: 'none', sm: 'block' }}>
                   <Box>
-
-                    {/* {review.tag_array.map((tag, index) => (
+                    {review.tag_array.map((tag, index) => (
                       <Chip key={index} label={tag} style={{ marginRight: '.2rem' }}></Chip>
-                    ))} */}
+                    ))}
                   </Box>
                   <Box>
                     <Typography>
@@ -121,9 +123,25 @@ export default function ReviewPage(props) {
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography>
-                      {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}>Google Play</a >
-                    </Typography>
+                    {
+                      review.book_info.price
+                        ? <Grid container alignItems="center" spacing={1}>
+                          <Grid item>
+                            <Typography>
+                              {review.book_info.price.toFixed(2)} {review.book_info.currency} @
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
+                          </Grid>
+                        </Grid>
+                        // <Typography>
+                        //   {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
+                        // </Typography>
+                        : <Typography>
+                          Price Info Unavailable
+                        </Typography>
+                    }
                   </Box>
                 </Box>
               </Grid>
@@ -143,11 +161,21 @@ export default function ReviewPage(props) {
                 <Box>
                   {
                     review.book_info.price
-                      ? <Typography>
-                        {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}>Google Play</a >
-                      </Typography>
+                      ? <Grid container alignItems="center" spacing={1}>
+                        <Grid item>
+                          <Typography>
+                            {review.book_info.price.toFixed(2)} {review.book_info.currency} @
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
+                        </Grid>
+                      </Grid>
+                      // <Typography>
+                      //   {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
+                      // </Typography>
                       : <Typography>
-                      No price available
+                      Price Info Unavailable
                       </Typography>
                   }
                 </Box>
@@ -163,6 +191,9 @@ export default function ReviewPage(props) {
               <Typography className={classes.reviewText}>
                 {review.review}
               </Typography>
+            </Grid>
+            <Grid container justify="center" item xs={12}>
+              <Comments />
             </Grid>
           </Grid>
         </Paper>
