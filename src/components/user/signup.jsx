@@ -61,7 +61,14 @@ export default function UserSignUp(props) {
     if (!verifyInputs()) {
       return;
     }
-    return true;
+    fetch('/api/users/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(
+        inputs
+      )
+    });
+    // return true;
     // make a request to users to sign up a user
   };
 
@@ -71,6 +78,13 @@ export default function UserSignUp(props) {
       [id]: { $set: value }
     });
     setInputs(newInput);
+    setValidInputs({
+      firstInput: true,
+      lastInput: true,
+      emailInput: true,
+      passwordInput: true,
+      confirmPasswordInput: true
+    });
   };
 
   return (

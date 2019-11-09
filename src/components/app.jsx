@@ -7,8 +7,9 @@ import {
 import NavigationBar from './nav/navigation-bar';
 import ReviewsList from './home/reviews-list';
 import AddReview from './rev/add-review';
-import UserSignUp from './user/signup.jsx';
+import UserSignUp from './user/signup';
 import ReviewPage from './rev/review-page';
+import Login from './user/login';
 
 export default function App(props) {
   const [user, setUser] = useState({ id: null });
@@ -17,6 +18,8 @@ export default function App(props) {
     <Router>
       <NavigationBar user={user}/>
       <Switch>
+        <Route key="login" exact path="/login" render={props => <Login {...props} />} />
+
         <Route key="users-sign-up" exact path="/signup" render={props => <UserSignUp {...props} />} />
         <Route key="review-page" path="/review/:id" render={props => <ReviewPage {...props} user={user} />} />
         <Route key="add-review" exact path="/add-review" render={props => <AddReview {...props} user={user} />} />

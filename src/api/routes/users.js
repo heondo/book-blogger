@@ -3,9 +3,11 @@ const router = express.Router();
 const db = require('./../db_connection');
 const bcrypt = require('bcryptjs');
 
+router.use(express.json());
+
 router.post('/signup', (req, res, next) => {
-  const { email, first, last, password } = req.body;
-  db.query('SELECT * FROM `user` WHERE email=?', email, (err, data) => {
+  const { emailInput, firstInput, lastInput, passwordInput } = req.body;
+  db.query('SELECT * FROM `user` WHERE email=?', emailInput, (err, data) => {
     if (err) {
       res.status(500);
       return next(err);
@@ -19,14 +21,14 @@ router.post('/signup', (req, res, next) => {
         res.status(500);
         return next(err);
       }
-      bcrypt.hash(password, salt, (err, hash) => {
+      bcrypt.hash(passwordInput, salt, (err, hash) => {
         // Store hash in your password DB.
         if (err) {
           res.status(500);
           return next(err);
         }
         let query = 'INSERT INTO `user`(`first`, `last`, `email`, `password`) VALUES (?, ?, ?, ?)';
-        db.query(query, [first, last, email, hash], (err, data) => {
+        db.query(query, [firstInput, lastInput, emailInput, hash], (err, data) => {
           if (err) {
             res.status(500);
             return next(err);
@@ -45,7 +47,18 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body;
-
+  db.query('SELECT * FROM `user` WHERE `email`=?', [email], (err, data) => {
+    if (err) {
+      res.status(500);
+      return next(err);
+    }
+    if (!data.length) {
+      res.status(404);
+      return next({
+        error: 'Auth failed'
+      });
+    }
+  });
 });
 
 module.exports = router;

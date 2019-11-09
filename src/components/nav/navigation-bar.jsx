@@ -29,7 +29,16 @@ export default function NavigationBar(props) {
         <Typography className={classes.title}>
           <Link className={classes.homeLink} to="/" >Book Blogger</Link>
         </Typography>
-        {props.user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (<Button component={Link} to="/signup">Sign Up</Button>)}
+        {props.user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (
+          <>
+            <Button component={Link} to="/signup">
+              Sign Up
+            </Button>
+            <Button component={Link} to="/login">
+              Login
+            </Button>
+          </>
+        )}
 
       </Toolbar>
     </AppBar>
