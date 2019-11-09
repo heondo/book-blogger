@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../db_connection');
 const bcrypt = require('bcryptjs');
+const update = require('immutability-helper');
 
 router.use(express.json());
 
@@ -47,6 +48,7 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email, password);
   db.query('SELECT * FROM `user` WHERE `email`=?', [email], (err, data) => {
     if (err) {
       res.status(500);
@@ -55,9 +57,27 @@ router.post('/login', (req, res, next) => {
     if (!data.length) {
       res.status(404);
       return next({
-        error: 'Auth failed'
+        message: 'Auth failed'
       });
     }
+    bcrypt.compare(password, data[0].password, (err, pwRes) => {
+      if (err) {
+        res.status(500);
+        return next(err);
+      }
+      if (!pwRes) {
+        res.status(404);
+        return next({
+          message: 'Auth failed'
+        });
+      }
+      res.status(200).json({
+        success: true,
+        user: update(data[0], {
+          password: { $set: null }
+        })
+      });
+    });
   });
 });
 

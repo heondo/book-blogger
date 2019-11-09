@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemIcon, ListItemText, Drawer } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -19,28 +22,68 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavigationBar(props) {
   const classes = useStyles();
+  const { container } = props;
+  const theme = useTheme();
+  const [state, setState] = useState(false);
+  const drawer = (
+    <div>
+      <List>
+        <ListItem button>
+          <ListItemIcon><HomeIcon /></ListItemIcon>
+          <ListItemText>Home</ListItemText>
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+          <ListItemText>Profile</ListItemText>
+        </ListItem>
+        <ListItem button onClick={() => {
+          props.setUser({ id: undefined });
+        }}>
+          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+          <ListItemText>Sign Out</ListItemText>
+        </ListItem>
+      </List>
+    </div>
+  );
+  const handleDrawerToggle = () => {
+    setState(prev => !prev);
+  };
 
   return (
-    <AppBar position="static">
-      <Toolbar className={classes.toolbar}>
-        <IconButton edge="start">
-          <MenuIcon />
-        </IconButton>
-        <Typography className={classes.title}>
-          <Link className={classes.homeLink} to="/" >Book Blogger</Link>
-        </Typography>
-        {props.user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (
-          <>
-            <Button component={Link} to="/signup">
-              Sign Up
-            </Button>
-            <Button component={Link} to="/login">
-              Login
-            </Button>
-          </>
-        )}
+    <div>
+      <AppBar position="static">
+        <Toolbar className={classes.toolbar}>
+          <IconButton edge="start" onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
+          <Typography className={classes.title}>
+            <Link className={classes.homeLink} to="/" >Book Blogger</Link>
+          </Typography>
+          {props.user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (
+            <>
+              <Button component={Link} to="/signup">
+                Sign Up
+              </Button>
+              <Button component={Link} to="/login">
+                Login
+              </Button>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        container={props.container}
+        variant="temporary"
+        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+        open={state}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true // Better open performance on mobile.
+        }}
+      >
+        {drawer}
+      </Drawer>
+    </div>
 
-      </Toolbar>
-    </AppBar>
   );
 }

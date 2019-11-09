@@ -87,6 +87,7 @@ FROM
 SELECT
     r.`id`,
     r.`user_id`,
+    c.`num_comments`,
     r.`review`,
     r.`upload_date`,
     b.`book_info`,
@@ -146,6 +147,10 @@ JOIN
 ) AS b
 ON
     b.`book_id` = r.`book_id`
+LEFT JOIN (
+    SELECT c.`review_id`, COUNT(c.`comment`) as num_comments FROM `comment` as c GROUP BY c.`review_id`
+) as c
+ON c.`review_id`=r.`id`
 ORDER BY
     r.`upload_date`
 DESC
@@ -154,6 +159,8 @@ LIMIT 50
 // Single Review Full Book information
 SELECT
     r.`id`,
+    c.`comments`,
+    c.`num_comments`,
     r.`user_id`,
     r.`review`,
     r.`upload_date`,
@@ -236,9 +243,69 @@ JOIN
 ) AS b
 ON
     b.`book_id` = r.`book_id`
+LEFT JOIN (
+    SELECT
+    c.`review_id`,
+    COUNT(c.`comment`) as num_comments,
+    JSON_ARRAYAGG(
+        JSON_OBJECT('comment_date', c.`comment_date`,
+                   'user_info', u.`user_info`, 'comment', c.`comment`)
+    ) as comments
+FROM
+    `comment` AS c
+JOIN
+    (
+    SELECT
+        `id` AS user_id,
+        JSON_OBJECT(
+            'email',
+            `email`,
+            'first',
+            `first`,
+            'last',
+            `last`
+        ) AS user_info
+    FROM
+        `user`
+) AS u
+ON
+    c.`user_id` = u.`user_id`
+    WHERE c.`review_id`=6
+    GROUP BY c.`review_id`
+) as c
+ON c.`review_id`=r.`id`
 WHERE
     r.`id` = 6
 ORDER BY
     r.`upload_date`
 DESC
 LIMIT 50
+
+// GET comments associated with a specific review
+SELECT
+    c.`review_id`,
+    COUNT(c.`comment`) as num_comments,
+    JSON_ARRAYAGG(
+        JSON_OBJECT('comment_date', c.`comment_date`,
+                   'user_info', u.`user_info`, 'comment', c.`comment`)
+    ) as comments
+FROM
+    `comment` AS c
+JOIN
+    (
+    SELECT
+        `id` AS user_id,
+        JSON_OBJECT(
+            'email',
+            `email`,
+            'first',
+            `first`,
+            'last',
+            `last`
+        ) AS user_info
+    FROM
+        `user`
+) AS u
+ON
+    c.`user_id` = u.`user_id`
+    GROUP BY c.`review_id`

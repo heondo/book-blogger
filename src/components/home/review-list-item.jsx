@@ -49,7 +49,7 @@ export default function ReviewListItem(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
 
-  const { id, user_id, review, upload_date, book_info, user_info, tag_array } = props.review || null;
+  const { id, user_id, review, upload_date, book_info, user_info, tag_array, num_comments } = props.review || null;
   const { title, authors, images, description } = book_info || null;
 
   const collapseReview = () => {
@@ -75,7 +75,7 @@ export default function ReviewListItem(props) {
             <Grid container item alignItems="center" xs>
               <ChatBubble />
               <Typography component="span">
-                20
+                {num_comments || 0}
               </Typography>
             </Grid>
           </Grid>

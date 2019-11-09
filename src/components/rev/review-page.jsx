@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ReviewPage(props) {
   const classes = useStyles();
+  const { user } = props;
 
   const [review, setReview] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -193,7 +194,7 @@ export default function ReviewPage(props) {
               </Typography>
             </Grid>
             <Grid container justify="center" item xs={12}>
-              <Comments />
+              <Comments reviewID={reviewID} user={user} numComments={review.num_comments} comments={review.comments}/>
             </Grid>
           </Grid>
         </Paper>
