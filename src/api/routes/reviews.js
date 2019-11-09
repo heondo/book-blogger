@@ -13,7 +13,7 @@ router.get('/:id', (req, res, next) => {
       return next(err);
     } else if (!data.length) {
       res.status(404);
-      return next({ message: `${reviewID} NA` });
+      return next({ error: `${reviewID} NA` });
     }
     data[0].tag_array = data[0].tag_array.split(',');
     data[0].upload_date = parseInt(data[0].upload_date) || null;
