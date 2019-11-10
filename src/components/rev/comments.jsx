@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Grid, List, Divider, ListItem, ListItemText, Typography, makeStyles } from '@material-ui/core';
 import CommentList from './comment-list';
+import update from 'immutability-helper';
 
 const useStyles = makeStyles(theme => ({
   commentAndButtons: {
@@ -15,7 +16,7 @@ export default function Comments(props) {
   const classes = useStyles();
   const { user, reviewID, numComments, comments } = props;
   const [comment, setComment] = useState('');
-  const [commentList, setCommentList] = useState(comments);
+  const [commentList, setCommentList] = useState(comments || []);
 
   const handleCommentChange = event => {
     const input = event.target.value;
@@ -37,9 +38,29 @@ export default function Comments(props) {
       body })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        addCommentToList(res.commentID);
+        setComment('');
       })
       .catch(err => console.error(err));
+  };
+
+  const addCommentToList = newID => {
+    let user_info;
+    if (!user.id) {
+      user_info = {
+        id: 5,
+        first: 'Guest',
+        last: 'Guest',
+        token: null
+      };
+    } else {
+      user_info = user;
+    }
+    const body = { user_info, comment_id: newID, comment, comment_date: new Date().getTime() / 1000 };
+    const newCommentsList = update(commentList, {
+      $unshift: [body]
+    });
+    setCommentList(newCommentsList);
   };
 
   return (
@@ -47,12 +68,12 @@ export default function Comments(props) {
     <>
       <Grid xs={12} md={8} item>
         <Typography className={classes.commentAndButtons}>
-          {numComments} {numComments === 1 ? 'comment' : 'comments'}
+          {commentList.length} {numComments === 1 ? 'comment' : 'comments'}
         </Typography>
       </Grid>
       <Grid container item justify="center" xs={12} md={8} spacing={1}>
         <Grid item xs={12}>
-          <TextField name="commentInput" rows={4} rowsMax={12} multiline variant="outlined" onChange={handleCommentChange} className={classes.commentAndButtons} placeholder="Add Comment Here" />
+          <TextField name="commentInput" rows={4} rowsMax={12} multiline variant="outlined" onChange={handleCommentChange} className={classes.commentAndButtons} placeholder="Add Comment Here" value={comment}/>
         </Grid>
         <Grid container item justify="flex-end" spacing={2}>
           <Grid item>
@@ -63,8 +84,12 @@ export default function Comments(props) {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container item xs={12} md={9}>
-        <CommentList comments={comments}/>
+      <Grid container item xs={12} md={8}>
+        {commentList.length
+          ? <CommentList comments={commentList} />
+          : <div>No comments</div>
+
+        }
       </Grid>
     </>
   );

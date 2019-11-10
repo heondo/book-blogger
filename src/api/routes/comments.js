@@ -15,7 +15,8 @@ router.post('/', (req, res, next) => {
     res.status(200);
     res.json({
       success: true,
-      message: `Comment made for review ${reviewID} with ID of: ${data.insertId}`
+      message: `Comment made for review ${reviewID} with ID of: ${data.insertId}`,
+      commentID: data.insertId
     });
   });
 });

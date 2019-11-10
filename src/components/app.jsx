@@ -12,15 +12,14 @@ import ReviewPage from './rev/review-page';
 import Login from './user/login';
 
 export default function App(props) {
-  const [user, setUser] = useState({ id: undefined });
+  const [user, setUser] = useState({ id: 1 });
 
   return (
     <Router>
       <NavigationBar user={user} setUser={setUser}/>
       <Switch>
         <Route key="login" exact path="/login" render={props => <Login {...props} setUser={setUser}/>} />
-
-        <Route key="users-sign-up" exact path="/signup" render={props => <UserSignUp {...props} />} />
+        <Route key="users-sign-up" exact path="/signup" render={props => <UserSignUp {...props} setUser={setUser}/>} />
         <Route key="review-page" path="/review/:id" render={props => <ReviewPage {...props} user={user} />} />
         <Route key="add-review" exact path="/add-review" render={props => <AddReview {...props} user={user} />} />
         <Route key="home-page" exact path="/" render={props => <ReviewsList {...props} />}/>

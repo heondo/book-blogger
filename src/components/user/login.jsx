@@ -47,7 +47,13 @@ export default function Login(props) {
           setLoginFailed(true);
           throw new Error('Login Failed');
         }
-        props.setUser(res.user);
+        // IDK IF THIS IS GOING TO RETURN THE SAME ID THING ANYMORE
+        props.setUser({
+          id: res.userID,
+          token: res.token,
+          first: res.first,
+          last: res.last
+        });
       })
       .catch(error => console.error(error));
   };

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavigationBar(props) {
   const classes = useStyles();
-  const { container } = props;
+  const { container, user, setUser } = props;
   const theme = useTheme();
   const [state, setState] = useState(false);
   const drawer = (
@@ -37,10 +37,10 @@ export default function NavigationBar(props) {
           <ListItemText>Profile</ListItemText>
         </ListItem>
         <ListItem button onClick={() => {
-          props.setUser({ id: undefined });
+          setUser({ id: undefined }); // THIS HAS TO CHANGE
         }}>
           <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-          <ListItemText>Sign Out</ListItemText>
+          <ListItemText>{user.id ? 'Sign Out' : 'Sign In'}</ListItemText>
         </ListItem>
       </List>
     </div>
@@ -59,7 +59,7 @@ export default function NavigationBar(props) {
           <Typography className={classes.title}>
             <Link className={classes.homeLink} to="/" >Book Blogger</Link>
           </Typography>
-          {props.user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (
+          {user.id ? (<Button component={Link} to="/add-review">+ Review</Button>) : (
             <>
               <Button component={Link} to="/signup">
                 Sign Up
@@ -72,7 +72,7 @@ export default function NavigationBar(props) {
         </Toolbar>
       </AppBar>
       <Drawer
-        container={props.container}
+        container={container}
         variant="temporary"
         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
         open={state}

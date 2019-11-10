@@ -3,6 +3,10 @@ const router = express.Router();
 const db = require('./../db_connection');
 const bcrypt = require('bcryptjs');
 const update = require('immutability-helper');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+
+require('dotenv').config({ path: path.resolve(__dirname, '..', '..', '..', '.env') });
 
 router.use(express.json());
 
@@ -38,7 +42,9 @@ router.post('/signup', (req, res, next) => {
           res.json({
             success: true,
             message: `User created at id ${data.insertId}`,
-            id: data.insertId
+            id: data.insertId,
+            first: firstInput,
+            last: lastInput
           });
         });
       });
@@ -48,7 +54,6 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
   db.query('SELECT * FROM `user` WHERE `email`=?', [email], (err, data) => {
     if (err) {
       res.status(500);
@@ -71,11 +76,19 @@ router.post('/login', (req, res, next) => {
           message: 'Auth failed'
         });
       }
+      const token = jwt.sign({
+        email: data[0].email,
+        userId: data[0].id
+      },
+      process.env.JWT_KEY, {
+        expiresIn: '6h'
+      });
       res.status(200).json({
         success: true,
-        user: update(data[0], {
-          password: { $set: null }
-        })
+        userID: data[0].id,
+        first: data[0].first,
+        last: data[0].last,
+        token
       });
     });
   });

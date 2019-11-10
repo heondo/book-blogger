@@ -67,7 +67,23 @@ export default function UserSignUp(props) {
       body: JSON.stringify(
         inputs
       )
-    });
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.error === 'Email already taken') {
+          setValidInputs(prev => update(prev, {
+            emailInput: { $set: false }
+          }));
+          throw new Error('email taken');
+        }
+        props.setUser({
+          id: res.id,
+          first: res.first,
+          last: res.last
+        });
+        props.history.push('/');
+      })
+      .catch(err => console.error(err));
     // return true;
     // make a request to users to sign up a user
   };
@@ -136,7 +152,7 @@ export default function UserSignUp(props) {
               aria-describedby="emailInputText"
               onChange={handleInputChange}/>
             {!validInputs.emailInput ? (
-              <FormHelperText id="email-helper">Please enter a valid email</FormHelperText>
+              <FormHelperText id="email-helper">Invalid email</FormHelperText>
             ) : (
               <FormHelperText id="email-helper">We'll never share your email.</FormHelperText>
             )}

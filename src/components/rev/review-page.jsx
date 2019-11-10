@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Comments from './comments';
 import moment from 'moment';
-import { Container, Paper, Grid, makeStyles, Box, Typography, Chip } from '@material-ui/core';
+import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, TextField } from '@material-ui/core';
 import ShopIcon from '@material-ui/icons/Shop';
 import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
-import { typography } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   paperContainer: {
@@ -34,6 +33,7 @@ export default function ReviewPage(props) {
   const { user } = props;
 
   const [review, setReview] = useState({});
+  const [reviewEdit, setReviewEdit] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const reviewID = props.match.params.id;
 
@@ -61,16 +61,9 @@ export default function ReviewPage(props) {
       .catch(error => console.error(error));
   };
 
-  // const convertRatingToStars = rating => {
-  //   const wholeRatings = Math.floor(rating);
-  //   let stars = [...Array(wholeRatings)].map((star, index) => (
-  //     <StarIcon fontSize="small" key={index} />
-  //   ));
-  //   if (!Number.isInteger(rating)) {
-  //     stars.push(<StarHalf fontSize="small"/>);
-  //   }
-  //   return stars;
-  // };
+  const toggleReviewEdit = () => {
+    setReviewEdit(!reviewEdit);
+  };
 
   return (!isLoaded)
     ? (
@@ -101,7 +94,7 @@ export default function ReviewPage(props) {
                 <Box>
                   <Grid container item alignItems="center">
                     {/* {convertRatingToStars(review.book_info.average_rating)} */}
-                    <Rating value={review.book_info.average_rating} precision={0.5} />
+                    <Rating readOnly value={review.book_info.average_rating} precision={0.5} />
                     <Typography style={{ marginLeft: '.2rem' }}>
                       {` out of `}{review.book_info.rating_count} ratings
                     </Typography>
@@ -188,10 +181,17 @@ export default function ReviewPage(props) {
                 <Typography component="span">
                   {` `}- {moment.unix(review.upload_date).calendar()}
                 </Typography>
+                {
+                  (review.user_id === user.id) ? (
+                    <Button color="default" variant="contained" style={{ marginLeft: '1rem' }} onClick={toggleReviewEdit}>
+                      Edit Review
+                    </Button>
+                  ) : undefined
+                }
               </Box>
-              <Typography className={classes.reviewText}>
+              <Box component={reviewEdit ? TextField : Typography} className={classes.reviewText}>
                 {review.review}
-              </Typography>
+              </Box>
             </Grid>
             <Grid container justify="center" item xs={12}>
               <Comments reviewID={reviewID} user={user} numComments={review.num_comments} comments={review.comments}/>
