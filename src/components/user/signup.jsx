@@ -81,7 +81,7 @@ export default function UserSignUp(props) {
           first: res.first,
           last: res.last
         });
-        props.history.push('/');
+        props.history.push(`/users/${res.id}`);
       })
       .catch(err => console.error(err));
     // return true;

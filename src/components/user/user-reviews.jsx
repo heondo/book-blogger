@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
 import moment from 'moment';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import ChatBubble from '@material-ui/icons/ChatBubble';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
   reviewContainer: {
-    margin: '1rem 0rem',
+    marginTop: '.3rem',
+    marginBottom: '.3rem',
     position: 'relative',
     backgroundColor: '#fafaf2',
     padding: '.2rem'
@@ -26,16 +27,17 @@ const useStyles = makeStyles(theme => ({
     display: '-webkit-box',
     WebkitLineClamp: '20',
     WebkitBoxOrient: 'vertical',
+    whiteSpace: 'pre-line',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
   collapseContainer: {
     marginTop: '.3rem'
   },
-  bookMarkIcon: {
+  deleteIcon: {
     position: 'absolute',
-    top: '0',
-    right: '.5rem'
+    top: '1rem',
+    right: '1rem'
   },
   imageThumbnail: {
     objectFit: 'contain',
@@ -45,14 +47,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ReviewListItem(props) {
+export default function UserReviews(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
-
-  const { user } = props;
-
-  const { id, user_id, review, upload_date, book_info, user_info, tag_array, num_comments } = props.review || null;
-  const { title, authors, images, description } = book_info || null;
+  const { review, user, userPageInfo } = props;
+  const { book_info, tag_array, review_id, num_comments, upload_date } = review;
 
   const collapseReview = () => {
     setReviewExpanded(prev => !prev);
@@ -63,8 +62,8 @@ export default function ReviewListItem(props) {
       <Grid container item xs={12} spacing={1}>
         <Grid container direction="column" justify="flex-start" item xs={3} sm={2}>
           <Grid item>
-            <Link to={`/review/${id}`}>
-              <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
+            <Link to={`/review/${review_id}`}>
+              <img src={book_info.images.thumbnail} alt={book_info.title} className={classes.imageThumbnail}/>
             </Link>
           </Grid>
           <Grid container item justify="flex-start" style={{ margin: '.4rem 0' }}>
@@ -86,36 +85,37 @@ export default function ReviewListItem(props) {
           <Grid container item xs={12} direction="column">
             <Box>
               <Typography variant="h6">
-                {title}
+                {book_info.title}
               </Typography>
             </Box>
             <Box>
               <Typography variant="subtitle2">
-                {authors.join(', ')}
+                {book_info.authors.join(', ')}
               </Typography>
             </Box>
             <Box className={classes.description}>
               <Typography variant="subtitle2">
-                {description}
+                {book_info.description}
               </Typography>
             </Box>
             <Box>
               <Collapse className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
                 <Typography className={classes.reviewText}>
-                  Review By: {`${user_info.first} ${user_info.last}`} - {moment.unix(upload_date).calendar()}<br /> {review}
+                  Reviewed {moment.unix(upload_date).calendar()}
+                  <br />
+                  {review.review}
                 </Typography>
               </Collapse>
             </Box>
             <Box style={{ margin: 'auto' }} onClick={collapseReview}>
-              {reviewExpanded ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
+              {reviewExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Box>
           </Grid>
         </Grid>
       </Grid>
-      {(user.id) ? <BookmarkBorderIcon
-        className={classes.bookMarkIcon}
+      {(user.id === userPageInfo.id) ? <DeleteIcon
+        className={classes.deleteIcon}
       /> : undefined}
-
     </Paper>
   );
 }

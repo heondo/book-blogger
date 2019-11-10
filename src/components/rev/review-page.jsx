@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Comments from './comments';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, TextField } from '@material-ui/core';
 import ShopIcon from '@material-ui/icons/Shop';
@@ -206,7 +207,9 @@ export default function ReviewPage(props) {
               </Box>
               <Box>
                 <Typography component="span" variant="h6">
-                  Review By: {review.user_info.first} {review.user_info.last}
+                  Review By: <Link to={`/users/${review.user_id}`}>
+                    {review.user_info.first} {review.user_info.last}
+                  </Link>
                 </Typography>
                 <Typography component="span">
                   {` `}- {moment.unix(review.upload_date).calendar()}

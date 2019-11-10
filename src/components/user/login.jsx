@@ -54,6 +54,7 @@ export default function Login(props) {
           first: res.first,
           last: res.last
         });
+        props.history.push(`/users/${res.userID}`);
       })
       .catch(error => console.error(error));
   };

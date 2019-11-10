@@ -6,6 +6,7 @@ import ReviewListItem from './review-list-item';
 export default function ReviewsList(props) {
   const [reviews, setReviews] = useState([]);
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
+  const { user } = props;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -39,7 +40,7 @@ export default function ReviewsList(props) {
       {
         (reviews.length)
           ? reviews.map(review => (
-            <ReviewListItem key={review.id} review={review} />
+            <ReviewListItem key={review.id} review={review} user={user}/>
           ))
           : <Typography>
             No reviews to be found
