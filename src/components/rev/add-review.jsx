@@ -46,7 +46,6 @@ export default function AddReview(props) {
     return function cleanup() {
       abortController.abort();
     };
-    // console.log(googleKey);
   }, []);
 
   const getTags = signal => {

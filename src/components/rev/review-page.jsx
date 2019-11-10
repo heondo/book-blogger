@@ -34,6 +34,7 @@ export default function ReviewPage(props) {
 
   const [review, setReview] = useState({});
   const [reviewEdit, setReviewEdit] = useState(false);
+  const [reviewText, setReviewText] = useState(review.review || '');
   const [isLoaded, setIsLoaded] = useState(false);
   const reviewID = props.match.params.id;
 
@@ -56,13 +57,42 @@ export default function ReviewPage(props) {
           throw new Error('No data available');
         }
         setReview(res.review);
+        setReviewText(res.review.review);
         setIsLoaded(prev => !prev);
       })
       .catch(error => console.error(error));
   };
 
+  const submitNewReview = () => {
+    // if it reaches this function that means there is some text in the review and
+    const body = JSON.stringify({
+      reviewID,
+      reviewText
+    });
+    fetch('/api/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        setReviewText(res.review);
+        setReviewEdit(!reviewEdit);
+      })
+      .catch(err => console.error(err));
+  };
+
   const toggleReviewEdit = () => {
-    setReviewEdit(!reviewEdit);
+    // if reviewEdit is already true, then submit the new review text;
+    if (reviewEdit && reviewText) {
+      submitNewReview();
+    } else {
+      setReviewText(review.review);
+      setReviewEdit(!reviewEdit);
+    }
   };
 
   return (!isLoaded)
@@ -184,14 +214,30 @@ export default function ReviewPage(props) {
                 {
                   (review.user_id === user.id) ? (
                     <Button color="default" variant="contained" style={{ marginLeft: '1rem' }} onClick={toggleReviewEdit}>
-                      Edit Review
+                      {reviewEdit ? 'Submit' : 'Edit Review'}
                     </Button>
                   ) : undefined
                 }
               </Box>
-              <Box component={reviewEdit ? TextField : Typography} className={classes.reviewText}>
-                {review.review}
-              </Box>
+              {
+                reviewEdit ? (
+                  <TextField
+                    value={reviewText}
+                    className={classes.reviewText}
+                    multiline
+                    defaultValue="Edit review here"
+                    variant="outlined"
+                    rows={3}
+                    rowsMax={15}
+                    onChange={e => {
+                      const value = e.target.value;
+                      setReviewText(value);
+                    }}
+                    style={{ width: '100%', marginTop: '1rem' }}/>
+                ) : (<Typography className={classes.reviewText}>
+                  {reviewText}
+                </Typography>)
+              }
             </Grid>
             <Grid container justify="center" item xs={12}>
               <Comments reviewID={reviewID} user={user} numComments={review.num_comments} comments={review.comments}/>

@@ -4,6 +4,22 @@ const db = require('./../db_connection');
 
 router.use(express.json());
 
+router.patch('/', (req, res, next) => {
+  const { reviewID, reviewText } = req.body;
+  let editReviewQuery = 'UPDATE `review` SET `review`=? WHERE `id`=?';
+  db.query(editReviewQuery, [reviewText, reviewID], (err, data) => {
+    if (err) {
+      res.status(500);
+      return next(err);
+    }
+    res.status(200).json({
+      success: true,
+      review: reviewText,
+      message: `Review of ID ${data.insertId} updated`
+    });
+  });
+});
+
 router.get('/:id', (req, res, next) => {
   const reviewID = req.params.id;
   let singleReviewQuery = "SELECT r.`id`, c.`comments`, c.`num_comments`, r.`user_id`, r.`review`, r.`upload_date`, b.`book_info`, u.`user_info`, review_tags.`tag_array` FROM `review` AS r JOIN ( SELECT `review_id`, GROUP_CONCAT(t.`tag`) AS tag_array FROM `review_tag` AS rt JOIN `tag` AS t ON rt.`tag_id` = t.`id` WHERE `review_id` = ? GROUP BY `review_id` ) AS review_tags ON review_tags.`review_id` = r.`id` JOIN ( SELECT `id` AS user_id, JSON_OBJECT( 'first', `first`, 'last', `last` ) AS user_info FROM `user` ) AS u ON u.`user_id` = r.`user_id` JOIN ( SELECT `id` AS book_id, JSON_OBJECT( 'authors', `authors`, 'title', `title`, 'images', `images`, 'description', `description`, 'price', `price`, 'currency', `currency`, 'links', `links`, 'publisher', `publisher`, 'publish_date', `publish_date`, 'lang', `lang`, 'page_count', `page_count`, 'categories', `categories`, 'average_rating', `average_rating`, 'rating_count', `rating_count` ) AS book_info FROM `book` ) AS b ON b.`book_id` = r.`book_id` LEFT JOIN ( SELECT c.`review_id`, COUNT(c.`comment`) as num_comments, JSON_ARRAYAGG( JSON_OBJECT('comment_id', c.`id`,'comment_date', c.`comment_date`, 'user_info', u.`user_info`, 'comment', c.`comment`) ) as comments FROM `comment` AS c JOIN ( SELECT `id` AS user_id, JSON_OBJECT( 'first', `first`, 'last', `last` ) AS user_info FROM `user` ) AS u ON c.`user_id` = u.`user_id` WHERE c.`review_id`=? GROUP BY c.`review_id` ) as c ON c.`review_id`=r.`id` WHERE r.`id` = ? ORDER BY r.`upload_date` DESC LIMIT 50";
