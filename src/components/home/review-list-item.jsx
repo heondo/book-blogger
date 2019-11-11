@@ -7,7 +7,7 @@ import ChatBubble from '@material-ui/icons/ChatBubble';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 const useStyles = makeStyles(theme => ({
   reviewContainer: {
     margin: '1rem 0rem',
@@ -51,7 +51,7 @@ export default function ReviewListItem(props) {
 
   const { user } = props;
 
-  const { id, user_id, review, upload_date, book_info, user_info, tag_array, num_comments } = props.review || null;
+  const { id, user_id, review, upload_date, book_info, user_info, tag_array, num_comments, review_likes } = props.review || null;
   const { title, authors, images, description } = book_info || null;
 
   const collapseReview = () => {
@@ -71,7 +71,7 @@ export default function ReviewListItem(props) {
             <Grid container item alignItems="center" xs>
               <FavoriteIcon />
               <Typography component="span">
-                5
+                {review_likes.length}
               </Typography>
             </Grid>
             <Grid container item alignItems="center" xs>
@@ -112,10 +112,19 @@ export default function ReviewListItem(props) {
           </Grid>
         </Grid>
       </Grid>
-      {(user.id) ? <BookmarkBorderIcon
-        className={classes.bookMarkIcon}
-      /> : undefined}
-
+      {(user.id && user.id !== user_id) ? (
+        (review_likes.includes(user.id) ? (
+          <BookmarkIcon
+            className={classes.bookMarkIcon}
+          />
+        ) : (
+          <BookmarkBorderIcon
+            className={classes.bookMarkIcon}
+          />
+        ))
+      )
+        : undefined
+      }
     </Paper>
   );
 }

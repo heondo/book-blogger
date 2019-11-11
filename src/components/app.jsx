@@ -13,7 +13,7 @@ import UserPage from './user/user-page';
 import Login from './user/login';
 
 export default function App(props) {
-  const [user, setUser] = useState({ id: 3 });
+  const [user, setUser] = useState({ id: 1 });
 
   return (
     <Router>
