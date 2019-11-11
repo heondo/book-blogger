@@ -112,7 +112,7 @@ export default function AddReview(props) {
       body
     })
       .then(res => res.json())
-      .then(res => console.log('Make this go to the book review page after'))
+      .then(res => console.log(res))
       .catch(err => console.error(err));
   };
 

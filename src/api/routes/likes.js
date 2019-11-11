@@ -6,7 +6,6 @@ router.use(express.json());
 
 router.post('/', (req, res, next) => {
   const { reviewID, userID } = req.body;
-  console.log(userID, reviewID);
   let insertBookmarkQuery = 'INSERT INTO `bookmark` (`user_id`, `review_id`) VALUES(? ,?)';
   db.query(insertBookmarkQuery, [userID, reviewID], (err, data) => {
     if (err) {
