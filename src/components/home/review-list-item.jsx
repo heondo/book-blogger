@@ -49,13 +49,21 @@ export default function ReviewListItem(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
 
-  const { user } = props;
+  const { user, reviewIndex, unAddReviewBookmark, addReviewBookmark } = props;
 
   const { id, user_id, review, upload_date, book_info, user_info, tag_array, num_comments, review_likes } = props.review || null;
   const { title, authors, images, description } = book_info || null;
 
   const collapseReview = () => {
     setReviewExpanded(prev => !prev);
+  };
+
+  const handleAddBookmark = () => {
+    addReviewBookmark(reviewIndex, id);
+  };
+
+  const handleRemoveBookmark = () => {
+    unAddReviewBookmark(reviewIndex, id);
   };
 
   return (
@@ -114,11 +122,12 @@ export default function ReviewListItem(props) {
       </Grid>
       {(user.id && user.id !== user_id) ? (
         (review_likes.includes(user.id) ? (
-          <BookmarkIcon
+          <BookmarkIcon onClick={handleRemoveBookmark}
             className={classes.bookMarkIcon}
           />
         ) : (
           <BookmarkBorderIcon
+            onClick={handleAddBookmark}
             className={classes.bookMarkIcon}
           />
         ))
