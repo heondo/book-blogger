@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
+import { Grid, Typography, Paper, makeStyles, Box, Collapse, Dialog, DialogTitle, Button } from '@material-ui/core';
 import moment from 'moment';
 import ChatBubble from '@material-ui/icons/ChatBubble';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -44,21 +44,52 @@ const useStyles = makeStyles(theme => ({
     maxHeight: '175px',
     height: '100%',
     width: '100%'
+  },
+  buttons: {
+    width: '80%',
+    margin: '.5rem auto'
   }
 }));
 
 export default function UserReviews(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
-  const { review, user, userPageInfo } = props;
+  const { review, user, userPageInfo, deleteReview } = props;
   const { book_info, tag_array, review_id, num_comments, upload_date } = review;
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   const collapseReview = () => {
     setReviewExpanded(prev => !prev);
   };
 
+  const handleClickOpen = () => {
+    setConfirmDeleteOpen(!confirmDeleteOpen);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteReview(review_id);
+  };
+
+  const ConfirmDeleteModal = () => {
+    console.log(props);
+    return (<>
+      <Dialog open={confirmDeleteOpen} onClose={handleClickOpen} >
+        <DialogTitle>
+          Delete Review?
+        </DialogTitle>
+        <Button className={classes.buttons} variant="contained" color="default" onClick={handleConfirmDelete}>
+          Confirm
+        </Button>
+        <Button className={classes.buttons} variant="contained" color="secondary" onClick={handleClickOpen}>
+          Cancel
+        </Button>
+      </Dialog>
+    </>);
+  };
+
   return (
     <Paper className={classes.reviewContainer}>
+      <ConfirmDeleteModal />
       <Grid container item xs={12} spacing={1}>
         <Grid container direction="column" justify="flex-start" item xs={3} sm={2}>
           <Grid item>
@@ -113,9 +144,12 @@ export default function UserReviews(props) {
           </Grid>
         </Grid>
       </Grid>
-      {(user.id === userPageInfo.id) ? <DeleteIcon
-        className={classes.deleteIcon}
-      /> : undefined}
+      {(user.id === userPageInfo.id) ? (
+        <DeleteIcon
+          className={classes.deleteIcon}
+          onClick={handleClickOpen}
+        />
+      ) : undefined}
     </Paper>
   );
 }

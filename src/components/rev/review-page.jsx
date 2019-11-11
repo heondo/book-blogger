@@ -86,6 +86,11 @@ export default function ReviewPage(props) {
       .catch(err => console.error(err));
   };
 
+  const cancelReviewEdit = () => {
+    setReviewText(review.review);
+    setReviewEdit(false);
+  };
+
   const toggleReviewEdit = () => {
     // if reviewEdit is already true, then submit the new review text;
     if (reviewEdit && reviewText) {
@@ -216,9 +221,14 @@ export default function ReviewPage(props) {
                 </Typography>
                 {
                   (review.user_id === user.id) ? (
+                    <>
                     <Button color="default" variant="contained" style={{ marginLeft: '1rem' }} onClick={toggleReviewEdit}>
                       {reviewEdit ? 'Submit' : 'Edit Review'}
                     </Button>
+                      {(reviewEdit ? <Button color="default" variant="contained" style={{ marginLeft: '1rem' }} onClick={cancelReviewEdit}>
+                        Cancel
+                      </Button> : undefined)}
+                    </>
                   ) : undefined
                 }
               </Box>

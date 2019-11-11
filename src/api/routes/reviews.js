@@ -4,6 +4,10 @@ const db = require('./../db_connection');
 
 router.use(express.json());
 
+router.delete('/', (req, res, next) => {
+  console.log(req.body);
+});
+
 router.patch('/', (req, res, next) => {
   const { reviewID, reviewText } = req.body;
   let editReviewQuery = 'UPDATE `review` SET `review`=? WHERE `id`=?';
@@ -34,8 +38,8 @@ router.get('/:id', (req, res, next) => {
     data[0].tag_array = data[0].tag_array.split(',');
     data[0].upload_date = parseInt(data[0].upload_date) || null;
     data[0].comments = JSON.parse(data[0].comments) || null;
-    (data[0].comments) ? data[0].comments.forEach(comment => comment.comment_date = parseInt(comment.comment_date)) : null;
-    (data[0].comments) ? data[0].comments.sort((a, b) => (a.comment_date < b.comment_date) ? 1 : -1) : null;
+    data[0].comments ? data[0].comments.forEach(comment => comment.comment_date = parseInt(comment.comment_date)) : null;
+    data[0].comments ? data[0].comments.sort((a, b) => (a.comment_date < b.comment_date) ? 1 : -1) : null;
     data[0].book_info = JSON.parse(data[0].book_info);
     data[0].user_info = JSON.parse(data[0].user_info);
     data[0].book_info.images = data[0].book_info.images ? JSON.parse(data[0].book_info.images) : null;

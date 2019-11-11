@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import LoadingCircle from './../helper/loading-circle';
-import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, TextField } from '@material-ui/core';
+import { Container, Paper, Grid, makeStyles, Typography } from '@material-ui/core';
 import UserReviews from './user-reviews';
+import update from 'immutability-helper';
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +43,18 @@ export default function UserPage(props) {
       .catch(err => console.error(err));
   };
 
+  const deleteReview = id => {
+    const newReviewArray = userPageInfo.reviews.filter(review => review.review_id === id);
+    fetch('/api/reviews', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ review_id: id })
+    })
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  };
+
   return (
     (!isLoaded)
       ? (
@@ -64,7 +77,7 @@ export default function UserPage(props) {
               </Grid>
               <Grid item xs={12}>
                 {userPageInfo.reviews.map(review => (
-                  <UserReviews key={review.review_id} review={review} user={user} userPageInfo={userPageInfo}/>
+                  <UserReviews key={review.review_id} review={review} user={user} userPageInfo={userPageInfo} deleteReview={deleteReview}/>
                 ))}
               </Grid>
             </Grid>
