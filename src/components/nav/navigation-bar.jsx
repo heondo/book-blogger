@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemIcon, ListItemText, Drawer } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemIcon, ListItemText, Drawer, Divider } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
   homeLink: {
     textDecoration: 'none',
     color: 'black'
-  }
+  },
+  random: theme.mixins.toolbar
 }));
 
 export default function NavigationBar(props) {
@@ -27,16 +28,20 @@ export default function NavigationBar(props) {
   const [state, setState] = useState(false);
   const drawer = (
     <div>
+      <div className={classes.random}/>
+      <Divider/>
       <List>
-        <ListItem button>
-          <ListItemIcon><HomeIcon /></ListItemIcon>
-          <ListItemText>Home</ListItemText>
-        </ListItem>
+        <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
+          <ListItem button>
+            <ListItemIcon ><HomeIcon /></ListItemIcon>
+            <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Home</ListItemText>
+          </ListItem>
+        </Link>
         {(user.id ? (
-          <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/users/${user.id}`} style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText>Profile</ListItemText>
+              <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Profile</ListItemText>
             </ListItem>
           </Link>
         ) : undefined)}

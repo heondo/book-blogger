@@ -23,6 +23,10 @@ export default function Comments(props) {
     setComment(input);
   };
 
+  const handleCancelComment = () => {
+    setComment('');
+  };
+
   const submitComment = () => {
     if (!comment || !comment.trim()) {
       return false;
@@ -80,7 +84,7 @@ export default function Comments(props) {
             <Button variant="contained" color="primary" onClick={submitComment}>Submit</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="secondary">Cancel</Button>
+            <Button variant="contained" color="secondary" onClick={handleCancelComment}>Cancel</Button>
           </Grid>
         </Grid>
       </Grid>

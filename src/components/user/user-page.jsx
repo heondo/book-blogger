@@ -16,7 +16,7 @@ export default function UserPage(props) {
   const classes = useStyles();
   const [userPageInfo, setUserPageInfo] = useState({});
 
-  const { user } = props;
+  const { user, match } = props;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -27,7 +27,7 @@ export default function UserPage(props) {
     return function cleanup() {
       abortController.abort();
     };
-  }, []);
+  }, [match.params.id]);
 
   const getUserInfo = signal => {
     const userPageID = parseInt(props.match.params.id);
