@@ -43,15 +43,26 @@ export default function UserPage(props) {
       .catch(err => console.error(err));
   };
 
-  const deleteReview = id => {
-    const newReviewArray = userPageInfo.reviews.filter(review => review.review_id === id);
+  const deleteReview = (id, modalClose) => {
+    const newReviewArray = userPageInfo.reviews.filter(review => !review.review_id === id);
     fetch('/api/reviews', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ review_id: id })
     })
       .then(res => res.json())
-      .then(res => console.log(res))
+      .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        const userStuff = update(
+          userPageInfo, {
+            reviews: { $set: newReviewArray }
+          }
+        );
+        setUserPageInfo(userStuff);
+        modalClose();
+      })
       .catch(err => console.error(err));
   };
 

@@ -58,6 +58,15 @@ export default function UserReviews(props) {
   const { book_info, tag_array, review_id, num_comments, upload_date } = review;
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, []);
+
   const collapseReview = () => {
     setReviewExpanded(prev => !prev);
   };
@@ -67,11 +76,10 @@ export default function UserReviews(props) {
   };
 
   const handleConfirmDelete = () => {
-    deleteReview(review_id);
+    deleteReview(review_id, handleClickOpen);
   };
 
   const ConfirmDeleteModal = () => {
-    console.log(props);
     return (<>
       <Dialog open={confirmDeleteOpen} onClose={handleClickOpen} >
         <DialogTitle>

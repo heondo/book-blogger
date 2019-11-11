@@ -110,7 +110,7 @@ export default function ReviewPage(props) {
         <Paper className={classes.paperContainer}>
           <Grid container spacing={1}>
             <Grid item container xs={3}>
-              <img className={classes.bookImage} src={review.book_info.images.thumbnail} alt="there should be an image link here" />
+              <img className={classes.bookImage} src={review.book_info.images.thumbnail || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvqH_jaoZOvRo6l76ULYm3Rja2vEsNcJ_YjLVE5SO64ijDrKWg&s'} alt="there should be an image link here" />
             </Grid>
             <Grid item xs={9}>
               <Grid container item xs={12} direction="column">

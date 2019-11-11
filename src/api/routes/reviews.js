@@ -5,7 +5,25 @@ const db = require('./../db_connection');
 router.use(express.json());
 
 router.delete('/', (req, res, next) => {
-  console.log(req.body);
+  const { review_id } = req.body;
+  let deleteQuery = 'DELETE FROM `review` WHERE `id`=?';
+  db.query(deleteQuery, [review_id], (err, data) => {
+    if (err) {
+      res.status(500);
+      return next(err);
+    }
+    if (!data.affectedRows) {
+      res.status(404);
+      return next({
+        message: 'No review with that id'
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `Review of ID: ${review_id} deleted`,
+      id: review_id
+    });
+  });
 });
 
 router.patch('/', (req, res, next) => {

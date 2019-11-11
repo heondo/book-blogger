@@ -214,7 +214,6 @@ export default function AddReview(props) {
         renderInput={params => (
           <TextField
             {...params}
-            freeSolo
             onChange={() => {
               setTagsInvalid(false);
             }}
