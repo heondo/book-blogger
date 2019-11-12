@@ -85,7 +85,7 @@ export default function BookmarkItem(props) {
               </Typography>
             </Grid>
             <Grid container item alignItems="center" style={{ width: 'auto' }}>
-              <ChatBubble fontSize="small"/>
+              <ChatBubble fontSize="small" style={{ marginRight: '.1rem' }}/>
               <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
               </Typography>

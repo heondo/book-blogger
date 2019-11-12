@@ -91,7 +91,7 @@ export default function Comments(props) {
       <Grid container item xs={12} md={8}>
         {commentList.length
           ? <CommentList comments={commentList} />
-          : <div>No comments</div>
+          : <Typography>No comments</Typography>
         }
       </Grid>
     </>
