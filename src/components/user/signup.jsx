@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Grid, Box, FormControl, InputLabel, Input, FormHelperText, makeStyles, Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, Grid, FormControl, InputLabel, Input, FormHelperText, makeStyles, Button } from '@material-ui/core';
 import update from 'immutability-helper';
-import { sizing } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   spacingNavFirst: {

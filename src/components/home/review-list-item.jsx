@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
 import moment from 'moment';

@@ -44,7 +44,7 @@ export default function UserPage(props) {
   };
 
   const deleteReview = (id, modalClose) => {
-    const newReviewArray = userPageInfo.reviews.filter(review => !review.review_id === id);
+    const newReviewArray = userPageInfo.reviews.filter(review => review.review_id !== id);
     fetch('/api/reviews', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },

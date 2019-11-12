@@ -1,6 +1,6 @@
 import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemAvatar, Avatar, ListItemText, Drawer } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({

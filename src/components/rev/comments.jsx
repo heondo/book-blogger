@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Grid, List, Divider, ListItem, ListItemText, Typography, makeStyles } from '@material-ui/core';
+import { Button, TextField, Grid, Typography, makeStyles } from '@material-ui/core';
 import CommentList from './comment-list';
 import update from 'immutability-helper';
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Comments(props) {
   const classes = useStyles();
-  const { user, reviewID, numComments, comments } = props;
+  const { user, reviewID, numComments, comments, numBookmarks } = props;
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState(comments || []);
 
@@ -72,7 +72,7 @@ export default function Comments(props) {
     <>
       <Grid xs={12} md={8} item>
         <Typography className={classes.commentAndButtons}>
-          {commentList.length} {numComments === 1 ? 'comment' : 'comments'}
+          {commentList.length} {numComments === 1 ? 'comment' : 'comments'} and {numBookmarks} bookmarks
         </Typography>
       </Grid>
       <Grid container item justify="center" xs={12} md={8} spacing={1}>
@@ -92,7 +92,6 @@ export default function Comments(props) {
         {commentList.length
           ? <CommentList comments={commentList} />
           : <div>No comments</div>
-
         }
       </Grid>
     </>

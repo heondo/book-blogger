@@ -6,6 +6,7 @@ import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, Text
 import ShopIcon from '@material-ui/icons/Shop';
 import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 const useStyles = makeStyles(theme => ({
   paperContainer: {
@@ -108,8 +109,8 @@ export default function ReviewPage(props) {
     : (
       <Container>
         <Paper className={classes.paperContainer}>
-          <Grid container spacing={1}>
-            <Grid item container xs={3}>
+          <Grid container spacing={1} justify="flex-start">
+            <Grid item container justify="center" xs={3}>
               <img className={classes.bookImage} src={review.book_info.images.thumbnail || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvqH_jaoZOvRo6l76ULYm3Rja2vEsNcJ_YjLVE5SO64ijDrKWg&s'} alt="there should be an image link here" />
             </Grid>
             <Grid item xs={9}>
@@ -253,7 +254,7 @@ export default function ReviewPage(props) {
               }
             </Grid>
             <Grid container justify="center" item xs={12}>
-              <Comments reviewID={reviewID} user={user} numComments={review.num_comments} comments={review.comments}/>
+              <Comments reviewID={reviewID} user={user} numComments={review.num_comments} numBookmarks={review.review_likes.length || 0} comments={review.comments}/>
             </Grid>
           </Grid>
         </Paper>
