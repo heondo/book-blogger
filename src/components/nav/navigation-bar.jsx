@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -47,7 +48,7 @@ export default function NavigationBar(props) {
           </Link>
             <Link to={`/bookmarks`} style={{ textDecoration: 'none', color: 'black' }}>
               <ListItem button>
-                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                <ListItemIcon><BookmarkIcon /></ListItemIcon>
                 <ListItemText style={{ textDecoration: 'none', color: 'black' }}>My Bookmarks</ListItemText>
               </ListItem>
             </Link>

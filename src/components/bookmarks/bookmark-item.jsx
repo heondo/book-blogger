@@ -77,13 +77,13 @@ export default function BookmarkItem(props) {
             <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
           </Grid>
           <Grid container item justify="flex-start" style={{ margin: '.4rem 0' }}>
-            <Grid container item alignItems="center" xs>
+            <Grid container item alignItems="center">
               <FavoriteIcon />
               <Typography component="span">
                 {review_likes.length}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center" xs>
+            <Grid container item alignItems="center">
               <ChatBubble />
               <Typography component="span">
                 {num_comments || 0}

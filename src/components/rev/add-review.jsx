@@ -112,7 +112,12 @@ export default function AddReview(props) {
       body
     })
       .then(res => res.json())
-      .then(res => console.log(res))
+      .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        props.history.push(`/review/${res.reviewID}`);
+      })
       .catch(err => console.error(err));
   };
 

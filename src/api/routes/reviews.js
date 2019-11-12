@@ -201,7 +201,7 @@ const makeReviewTags = (reviewID, tagIDs, res, next) => {
         res.status(500);
         return next(err);
       }
-      res.status(200).json({ success: true, data: `One review created at ID ${reviewID}` });
+      res.status(200).json({ success: true, data: `One review created at ID ${reviewID}`, reviewID });
     });
   });
 };
