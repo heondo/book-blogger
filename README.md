@@ -1,8 +1,13 @@
 # book-blogger
 
-### Libraries/Frameworks
+#### Libraries/Frameworks
 * ReactJS/Hooks
+* Express/NodeJS
+* MySQL 5.7
 * Material-UI
-First "solo" full stack project. Users can share reviews on books that they've recently read, users can like and comment on said review.
+* Google Books API
 
-Books are gathered from Google's Books API, using material-ui.
+##### Purpose
+
+Users can share, view, and save reviews on various books gathered from the Google Books API.
+Book information is collected from the API, with book tags that are autocompleted or created by the user.
