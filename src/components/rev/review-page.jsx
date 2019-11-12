@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   bookImage: {
     objectFit: 'contain',
     maxHeight: '300px',
-    height: '100%',
+    height: 'auto',
     width: '100%'
   },
   description: {

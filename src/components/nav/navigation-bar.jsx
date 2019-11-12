@@ -5,6 +5,7 @@ import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListIt
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
@@ -40,26 +41,43 @@ export default function NavigationBar(props) {
         </Link>
         {(user.id ? (
           <>
-          <Link to={`/users/${user.id}`} style={{ textDecoration: 'none', color: 'black' }}>
-            <ListItem button>
-              <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Profile</ListItemText>
-            </ListItem>
-          </Link>
+            <Link to={`/users/${user.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+              <ListItem button>
+                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Profile</ListItemText>
+              </ListItem>
+            </Link>
             <Link to={`/bookmarks`} style={{ textDecoration: 'none', color: 'black' }}>
               <ListItem button>
                 <ListItemIcon><BookmarkIcon /></ListItemIcon>
                 <ListItemText style={{ textDecoration: 'none', color: 'black' }}>My Bookmarks</ListItemText>
               </ListItem>
             </Link>
+            <Link to="/" style={{ textDecoration: 'none', color: 'black' }} onClick={() => {
+              props.setUser({ id: undefined });
+            }}>
+              <ListItem>
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                <ListItemText>Sign Out</ListItemText>
+              </ListItem>
+            </Link>
           </>
-        ) : undefined)}
-        <ListItem button onClick={() => {
-          setUser({ id: undefined }); // THIS HAS TO CHANGE
-        }}>
-          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-          <ListItemText>{user.id ? 'Sign Out' : 'Sign In'}</ListItemText>
-        </ListItem>
+        ) : (
+          <>
+              <Link to={`/login`} style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button>
+                  <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                  <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Login</ListItemText>
+                </ListItem>
+              </Link>
+              <Link to={`/signup`} style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button>
+                  <ListItemIcon><PersonAddIcon /></ListItemIcon>
+                  <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Sign Up</ListItemText>
+                </ListItem>
+              </Link>
+          </>
+        ))}
       </List>
     </div>
   );

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse, Dialog, DialogTitle, Button } from '@material-ui/core';
 import moment from 'moment';
 import ChatBubble from '@material-ui/icons/ChatBubble';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import DeleteIcon from '@material-ui/icons/Delete';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 const useStyles = makeStyles(theme => ({
   reviewContainer: {
@@ -55,7 +55,7 @@ export default function UserReviews(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
   const { review, user, userPageInfo, deleteReview } = props;
-  const { book_info, tag_array, review_id, num_comments, upload_date } = review;
+  const { book_info, tag_array, review_id, num_comments, upload_date, review_likes } = review;
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   useEffect(() => {
@@ -105,16 +105,17 @@ export default function UserReviews(props) {
               <img src={book_info.images.thumbnail} alt={book_info.title} className={classes.imageThumbnail}/>
             </Link>
           </Grid>
-          <Grid container item justify="flex-start" style={{ margin: '.4rem 0' }}>
-            <Grid container item alignItems="center" xs>
-              <FavoriteIcon />
+          <Grid container item spacing={1} justify="center">
+            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+              <BookmarkIcon fontSize="small" variant="subtitle2" />
               <Typography component="span">
-                5
+                {review_likes.length}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center" xs>
-              <ChatBubble />
-              <Typography component="span">
+            <Grid container item alignItems="center"
+              style={{ width: 'auto' }}>
+              <ChatBubble fontSize="small" />
+              <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
               </Typography>
             </Grid>

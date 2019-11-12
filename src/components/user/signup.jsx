@@ -116,7 +116,6 @@ export default function UserSignUp(props) {
               error={!validInputs.firstInput}
               aria-describedby="firstNameInput"
               width={1}
-              helperText="Please enter a first name"
               onChange={handleInputChange}/>
             {!validInputs.firstInput ? (
               <FormHelperText id="first-helper">Please enter a first name</FormHelperText>

@@ -63,28 +63,32 @@ export default function Login(props) {
     <Container>
       <Grid container item justify="center" xs={12} spacing={1} style={{ marginTop: '1rem' }}>
         <Grid item xs={8}>
-          <InputLabel
-            htmlFor="email">Email address</InputLabel>
-          <Input
-            id="email"
-            required
-            error={!validEmail}
-            type="email"
-            aria-describedby="emailText"
-            onChange={handleInputChange}
-            style={{ width: '100%' }}/>
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel
+              htmlFor="email">Email address</InputLabel>
+            <Input
+              id="email"
+              required
+              error={!validEmail}
+              type="email"
+              aria-describedby="emailText"
+              onChange={handleInputChange}
+              style={{ width: '100%' }} />
+          </FormControl>
         </Grid>
         <Grid item xs={8}>
-          <InputLabel
-            htmlFor="password">Password</InputLabel>
-          <Input
-            id="password"
-            required
-            error={!validPassword}
-            type="password"
-            aria-describedby="passwordText"
-            style={{ width: '100%' }}
-            onChange={handleInputChange} />
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel
+              htmlFor="password">Password</InputLabel>
+            <Input
+              id="password"
+              required
+              error={!validPassword}
+              type="password"
+              aria-describedby="passwordText"
+              style={{ width: '100%' }}
+              onChange={handleInputChange} />
+          </FormControl>
         </Grid>
         {loginFailed ? (
           <Grid item xs={8}>

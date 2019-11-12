@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import ChatBubble from '@material-ui/icons/ChatBubble';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
@@ -30,12 +30,13 @@ const useStyles = makeStyles(theme => ({
     WebkitLineClamp: '20',
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
+    whiteSpace: 'pre-line',
     textOverflow: 'ellipsis'
   },
   imageThumbnail: {
     objectFit: 'contain',
     maxHeight: '175px',
-    height: '100%',
+    height: 'auto',
     width: '100%'
   },
   bookMarkIcon: {
@@ -53,9 +54,7 @@ export default function BookmarkItem(props) {
   const { book_info, review_text, bookmark_id, user_id, num_comments, user_info, tag_array, review_likes, upload_date, review_id } = bookmark;
   const { images, description, title, authors } = book_info;
 
-  useEffect(() => {
-
-  }, [review_likes]);
+  useEffect(() => {}, [review_likes]);
 
   const collapseReview = () => {
     setReviewExpanded(prev => !prev);
@@ -72,20 +71,22 @@ export default function BookmarkItem(props) {
   return (
     <Paper className={classes.bookmarkItemContainer}>
       <Grid container spacing={1}>
-        <Grid container item xs={3} sm={2} direction="column">
-          <Grid item>
-            <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
+        <Grid container item xs={3} sm={2} spacing={1}direction="column">
+          <Grid container item justify="center">
+            <Link to={`/review/${review_id}`}>
+              <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
+            </Link>
           </Grid>
-          <Grid container item justify="flex-start" style={{ margin: '.4rem 0' }}>
-            <Grid container item alignItems="center">
-              <FavoriteIcon />
-              <Typography component="span">
+          <Grid container item spacing={1} justify="center">
+            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+              <BookmarkIcon fontSize="small"/>
+              <Typography component="span" variant="subtitle2">
                 {review_likes.length}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center">
-              <ChatBubble />
-              <Typography component="span">
+            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+              <ChatBubble fontSize="small"/>
+              <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
               </Typography>
             </Grid>
@@ -93,7 +94,7 @@ export default function BookmarkItem(props) {
         </Grid>
         <Grid container item xs={9} sm={10} spacing={1}>
           <Grid container item xs={12} direction="column">
-            <Box>
+            <Box width={0.9}>
               <Typography variant="h6">
                 {title}
               </Typography>

@@ -4,7 +4,6 @@ import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui
 import moment from 'moment';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import ChatBubble from '@material-ui/icons/ChatBubble';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
@@ -24,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
   reviewText: {
     display: '-webkit-box',
+    whiteSpace: 'pre-line',
     WebkitLineClamp: '20',
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   imageThumbnail: {
     objectFit: 'contain',
     maxHeight: '175px',
-    height: '100%',
+    height: 'auto',
     width: '100%'
   }
 }));
@@ -70,21 +70,22 @@ export default function ReviewListItem(props) {
     <Paper className={classes.reviewContainer}>
       <Grid container item xs={12} spacing={1}>
         <Grid container direction="column" justify="flex-start" item xs={3} sm={2}>
-          <Grid item>
+          <Grid container item justify="center">
             <Link to={`/review/${id}`}>
               <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
             </Link>
           </Grid>
-          <Grid container item justify="flex-start" style={{ margin: '.4rem 0' }}>
-            <Grid container item alignItems="center">
-              <FavoriteIcon />
+          <Grid container item spacing={1} justify="center">
+            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+              <BookmarkIcon fontSize="small" variant="subtitle2"/>
               <Typography component="span">
                 {review_likes.length}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center">
-              <ChatBubble />
-              <Typography component="span">
+            <Grid container item alignItems="center"
+              style= {{ width: 'auto' }}>
+              <ChatBubble fontSize="small"/>
+              <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
               </Typography>
             </Grid>
@@ -92,7 +93,7 @@ export default function ReviewListItem(props) {
         </Grid>
         <Grid container item xs={9} sm={10} spacing={1}>
           <Grid container item xs={12} direction="column">
-            <Box>
+            <Box width={0.9}>
               <Typography variant="h6">
                 {title}
               </Typography>
@@ -109,7 +110,10 @@ export default function ReviewListItem(props) {
             </Box>
             <Box>
               <Collapse className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
-                <Typography className={classes.reviewText}>
+                <Typography
+                  className={classes.reviewText}
+                  variant="body1"
+                >
                   Review By: {`${user_info.first} ${user_info.last}`} - {moment.unix(upload_date).calendar()}<br /> {review}
                 </Typography>
               </Collapse>
