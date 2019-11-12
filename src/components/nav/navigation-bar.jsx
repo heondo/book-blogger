@@ -38,12 +38,20 @@ export default function NavigationBar(props) {
           </ListItem>
         </Link>
         {(user.id ? (
+          <>
           <Link to={`/users/${user.id}`} style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
               <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Profile</ListItemText>
             </ListItem>
           </Link>
+            <Link to={`/bookmarks`} style={{ textDecoration: 'none', color: 'black' }}>
+              <ListItem button>
+                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                <ListItemText style={{ textDecoration: 'none', color: 'black' }}>My Bookmarks</ListItemText>
+              </ListItem>
+            </Link>
+          </>
         ) : undefined)}
         <ListItem button onClick={() => {
           setUser({ id: undefined }); // THIS HAS TO CHANGE

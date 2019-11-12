@@ -55,6 +55,9 @@ export default function ReviewsList(props) {
       }) })
       .then(res => res.json())
       .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
         setReviews(newReviews);
       })
       .catch(err => console.error(err));
@@ -66,10 +69,9 @@ export default function ReviewsList(props) {
       .then(res => {
         if (res.error) {
           throw new Error(res.message);
-        } else {
-          setReviews(res.reviews);
-          setReviewsLoaded(prev => !prev);
         }
+        setReviews(res.reviews);
+        setReviewsLoaded(prev => !prev);
       })
       .catch(err => console.error(err));
   };
