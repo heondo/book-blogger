@@ -1,5 +1,11 @@
 # Book Blogger
 
+#### Languages
+* HTML5
+* CSS3
+* JS
+* SQL
+
 #### Libraries/Frameworks
 * ReactJS/Hooks
 * Express/NodeJS
