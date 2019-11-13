@@ -34,7 +34,11 @@ const useStyles = makeStyles(theme => ({
   bookMarkIcon: {
     position: 'absolute',
     top: '0',
-    right: '.5rem'
+    right: '.5rem',
+    '&:hover': {
+      transform: 'scale(1.1)',
+      transition: 'all .3s ease-in-out'
+    }
   }
 }));
 
