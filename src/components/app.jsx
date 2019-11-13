@@ -14,7 +14,7 @@ import UserPage from './user/user-page';
 import Login from './user/login';
 
 export default function App(props) {
-  const [user, setUser] = useState({ id: undefined });
+  const [user, setUser] = useState({ id: 3 });
 
   return (
     <Router>

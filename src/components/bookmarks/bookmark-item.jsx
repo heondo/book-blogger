@@ -77,8 +77,8 @@ export default function BookmarkItem(props) {
               <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
             </Link>
           </Grid>
-          <Grid container item spacing={1} justify="center">
-            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+          <Grid container item spacing={1} justify="flex-start">
+            <Grid container item alignItems="center" style={{ width: 'auto', marginLeft: '.3rem' }}>
               <BookmarkIcon fontSize="small"/>
               <Typography component="span" variant="subtitle2">
                 {review_likes.length}

@@ -105,8 +105,8 @@ export default function UserReviews(props) {
               <img src={book_info.images.thumbnail} alt={book_info.title} className={classes.imageThumbnail}/>
             </Link>
           </Grid>
-          <Grid container item spacing={1} justify="center">
-            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+          <Grid container item spacing={1} justify="flex-start">
+            <Grid container item alignItems="center" style={{ width: 'auto', marginLeft: '.3rem' }}>
               <BookmarkIcon fontSize="small" variant="subtitle2" />
               <Typography component="span">
                 {review_likes.length}

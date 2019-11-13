@@ -6,11 +6,14 @@ import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, Text
 import ShopIcon from '@material-ui/icons/Shop';
 import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import update from 'immutability-helper';
 
 const useStyles = makeStyles(theme => ({
   paperContainer: {
-    padding: '.5rem'
+    padding: '.5rem',
+    position: 'relative'
   },
   bookImage: {
     objectFit: 'contain',
@@ -27,6 +30,11 @@ const useStyles = makeStyles(theme => ({
   },
   reviewText: {
     whiteSpace: 'pre-line'
+  },
+  bookMarkIcon: {
+    position: 'absolute',
+    top: '0',
+    right: '.5rem'
   }
 }));
 
@@ -55,6 +63,9 @@ export default function ReviewPage(props) {
     fetch(`/api/reviews/${reviewID}`, { signal })
       .then(res => res.json())
       .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
         if (res.message === `${reviewID} NA`) {
           throw new Error('No data available');
         }
@@ -100,6 +111,53 @@ export default function ReviewPage(props) {
       setReviewText(review.review);
       setReviewEdit(!reviewEdit);
     }
+  };
+
+  const handleAddBookmark = () => {
+    const body = JSON.stringify({
+      userID: user.id,
+      reviewID: review.id
+    });
+    fetch('/api/likes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        const newReview = update(review, {
+          review_likes: { $push: [user.id] }
+        });
+        setReview(newReview);
+      })
+      .catch(error => console.log(error));
+  };
+
+  const handleRemoveBookmark = () => {
+    const body = JSON.stringify({
+      userID: user.id,
+      reviewID: review.id
+    });
+    fetch('/api/likes', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        const newReviewLikes = review.review_likes.filter(id => id !== user.id);
+        const newReview = update(review, {
+          review_likes: { $set: newReviewLikes }
+        });
+        setReview(newReview);
+      })
+      .catch(error => console.log(error));
   };
 
   return (!isLoaded)
@@ -257,6 +315,20 @@ export default function ReviewPage(props) {
               <Comments reviewID={reviewID} user={user} numComments={review.num_comments} numBookmarks={review.review_likes.length || 0} comments={review.comments}/>
             </Grid>
           </Grid>
+          {(user.id && user.id !== review.user_id) ? (
+            (review.review_likes.includes(user.id) ? (
+              <BookmarkIcon onClick={handleRemoveBookmark}
+                className={classes.bookMarkIcon}
+              />
+            ) : (
+              <BookmarkBorderIcon
+                onClick={handleAddBookmark}
+                className={classes.bookMarkIcon}
+              />
+            ))
+          )
+            : undefined
+          }
         </Paper>
       </Container>
     );
