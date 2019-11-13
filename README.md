@@ -1,4 +1,4 @@
-# book-blogger
+# Book Blogger
 
 #### Libraries/Frameworks
 * ReactJS/Hooks
@@ -11,4 +11,7 @@
 ##### Purpose
 
 Users can share, view, and save reviews on various books gathered from the Google Books API.
+
+Comment on reviews as a guest, or sign up and create your own review!
+
 Book information is collected from the API, with book tags that are autocompleted or created by the user.
