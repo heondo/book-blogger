@@ -43,6 +43,7 @@ export default function Login(props) {
     })
       .then(res => res.json())
       .then(res => {
+        console.log(res);
         if (res.error === 'Auth failed') {
           setLoginFailed(true);
           throw new Error('Login Failed');

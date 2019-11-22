@@ -28,12 +28,17 @@ export default function NavigationBar(props) {
   const { container, user, setUser } = props;
   const theme = useTheme();
   const [state, setState] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setState(prev => !prev);
+  };
+
   const drawer = (
     <div>
       <div className={classes.random}/>
       <Divider/>
       <List>
-        <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
+        <Link to='/' onClick={handleDrawerToggle} style={{ textDecoration: 'none', color: 'black' }}>
           <ListItem button>
             <ListItemIcon ><HomeIcon /></ListItemIcon>
             <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Home</ListItemText>
@@ -41,13 +46,13 @@ export default function NavigationBar(props) {
         </Link>
         {(user.id ? (
           <>
-            <Link to={`/users/${user.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+            <Link to={`/users/${user.id}`} onClick={handleDrawerToggle} style={{ textDecoration: 'none', color: 'black' }}>
               <ListItem button>
                 <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                 <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Profile</ListItemText>
               </ListItem>
             </Link>
-            <Link to={`/bookmarks`} style={{ textDecoration: 'none', color: 'black' }}>
+            <Link to={`/bookmarks`} onClick={handleDrawerToggle} style={{ textDecoration: 'none', color: 'black' }}>
               <ListItem button>
                 <ListItemIcon><BookmarkIcon /></ListItemIcon>
                 <ListItemText style={{ textDecoration: 'none', color: 'black' }}>My Bookmarks</ListItemText>
@@ -56,7 +61,10 @@ export default function NavigationBar(props) {
             <Link to="/" style={{ textDecoration: 'none', color: 'black' }} onClick={() => {
               props.setUser({ id: undefined });
             }}>
-              <ListItem>
+              <ListItem onClick={() => {
+                setUser(null);
+                handleDrawerToggle();
+              }}>
                 <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                 <ListItemText>Sign Out</ListItemText>
               </ListItem>
@@ -64,13 +72,13 @@ export default function NavigationBar(props) {
           </>
         ) : (
           <>
-              <Link to={`/login`} style={{ textDecoration: 'none', color: 'black' }}>
+              <Link to={`/login`} onClick={handleDrawerToggle} style={{ textDecoration: 'none', color: 'black' }}>
                 <ListItem button>
                   <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                   <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Login</ListItemText>
                 </ListItem>
               </Link>
-              <Link to={`/signup`} style={{ textDecoration: 'none', color: 'black' }}>
+              <Link to={`/signup`} onClick={handleDrawerToggle} style={{ textDecoration: 'none', color: 'black' }}>
                 <ListItem button>
                   <ListItemIcon><PersonAddIcon /></ListItemIcon>
                   <ListItemText style={{ textDecoration: 'none', color: 'black' }}>Sign Up</ListItemText>
@@ -81,9 +89,6 @@ export default function NavigationBar(props) {
       </List>
     </div>
   );
-  const handleDrawerToggle = () => {
-    setState(prev => !prev);
-  };
 
   return (
     <div>
@@ -112,7 +117,6 @@ export default function NavigationBar(props) {
         variant="temporary"
         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
         open={state}
-        onClose={handleDrawerToggle}
         ModalProps={{
           keepMounted: true // Better open performance on mobile.
         }}
