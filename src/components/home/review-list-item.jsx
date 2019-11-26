@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
 import moment from 'moment';
@@ -52,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 export default function ReviewListItem(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
+  const reviewEl = useRef(null);
 
   const { user, reviewIndex, unAddReviewBookmark, addReviewBookmark } = props;
 
@@ -115,7 +116,7 @@ export default function ReviewListItem(props) {
               </Typography>
             </Box>
             <Box>
-              <Collapse className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
+              <Collapse ref={reviewEl} className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
                 <Typography
                   className={classes.reviewText}
                   variant="body1"
@@ -124,9 +125,13 @@ export default function ReviewListItem(props) {
                 </Typography>
               </Collapse>
             </Box>
-            <Box style={{ margin: 'auto' }} onClick={collapseReview}>
-              {reviewExpanded ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
+            {!reviewEl.current ? <Box style= {{ margin: 'auto' }} onClick={collapseReview}>
+              {reviewExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Box>
+              : reviewEl.current.scrollHeight > 100 ? <Box style={{ margin: 'auto' }} onClick={collapseReview}>
+                {reviewExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Box> : undefined
+            }
           </Grid>
         </Grid>
       </Grid>

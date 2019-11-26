@@ -9,8 +9,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const userInfoAvatar = props.
-
 export default function CommentList(props) {
   const classes = useStyles();
 

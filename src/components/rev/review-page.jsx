@@ -55,6 +55,7 @@ export default function ReviewPage(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const reviewID = props.match.params.id;
+  const descriptionEl = useRef(null);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -204,15 +205,19 @@ export default function ReviewPage(props) {
                   </Grid>
                 </Box>
                 <Box>
-                  <Collapse in={descriptionExpanded} collapsedHeight="40px">
+                  <Collapse ref={descriptionEl} in={descriptionExpanded} collapsedHeight="40px">
                     <Typography variant="body2" className={classes.description}>
                       {review.book_info.description}
                     </Typography>
                   </Collapse>
                 </Box>
-                <Box onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
+                {!descriptionEl.current ? <Box onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
                   {descriptionExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </Box>
+                  : descriptionEl.current.scrollHeight > 40 ? <Box onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
+                    {descriptionExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </Box> : undefined
+                }
                 <Box display={{ xs: 'none', sm: 'block' }}>
                   <Box>
                     {review.tag_array.map((tag, index) => (
@@ -270,9 +275,6 @@ export default function ReviewPage(props) {
                           <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
                         </Grid>
                       </Grid>
-                      // <Typography>
-                      //   {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
-                      // </Typography>
                       : <Typography>
                       Price Info Unavailable
                       </Typography>
