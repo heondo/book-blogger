@@ -52,6 +52,12 @@ export default function UserSignUp(props) {
         passwordInput: { $set: false }
       });
     }
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)) {
+      valid = false;
+      newValidInputs = update(newValidInputs, {
+        emailInput: { $set: false }
+      });
+    }
     setValidInputs(newValidInputs);
     return valid;
   };
