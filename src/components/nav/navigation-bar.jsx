@@ -118,7 +118,8 @@ export default function NavigationBar(props) {
         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
         open={state}
         ModalProps={{
-          keepMounted: true // Better open performance on mobile.
+          keepMounted: true, // Better open performance on mobile.
+          onBackdropClick: handleDrawerToggle
         }}
       >
         {drawer}

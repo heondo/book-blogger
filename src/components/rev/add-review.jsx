@@ -200,9 +200,6 @@ export default function AddReview(props) {
         disableCloseOnSelect
         getOptionLabel={option => (option.tag) ? option.tag : option}
         renderTags={(value, { className }) => {
-          // const arrTags = value.map(option => (
-          //   (typeof option === 'object' && option.tag) ? option.tag : option
-          // ));
           setSelectedTags(value);
           return value.map((option, index) => (
             <Chip

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Comments from './comments';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, TextField } from '@material-ui/core';
+import { Container, Paper, Grid, makeStyles, Box, Typography, Chip, Button, TextField, Collapse } from '@material-ui/core';
 import ShopIcon from '@material-ui/icons/Shop';
 import Rating from '@material-ui/lab/Rating';
 import LoadingCircle from './../helper/loading-circle';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import update from 'immutability-helper';
 
@@ -23,6 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   description: {
     display: '-webkit-box',
+    fontSize: '14px',
     WebkitLineClamp: '5',
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
@@ -50,6 +53,7 @@ export default function ReviewPage(props) {
   const [reviewEdit, setReviewEdit] = useState(false);
   const [reviewText, setReviewText] = useState(review.review || '');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const reviewID = props.match.params.id;
 
   useEffect(() => {
@@ -172,7 +176,7 @@ export default function ReviewPage(props) {
       <Container>
         <Paper className={classes.paperContainer}>
           <Grid container spacing={1} justify="flex-start">
-            <Grid item container justify="center" xs={3}>
+            <Grid item container direction="column" justify="flex-start" xs={3} style={{ marginTop: '.5rem' }}>
               <img className={classes.bookImage} src={review.book_info.images.thumbnail || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvqH_jaoZOvRo6l76ULYm3Rja2vEsNcJ_YjLVE5SO64ijDrKWg&s'} alt="there should be an image link here" />
             </Grid>
             <Grid item xs={9}>
@@ -199,10 +203,15 @@ export default function ReviewPage(props) {
                     </Typography>
                   </Grid>
                 </Box>
-                <Box className={classes.description}>
-                  <Typography variant="body1">
-                    {review.book_info.description}
-                  </Typography>
+                <Box>
+                  <Collapse in={descriptionExpanded} collapsedHeight="40px">
+                    <Typography variant="body2" className={classes.description}>
+                      {review.book_info.description}
+                    </Typography>
+                  </Collapse>
+                </Box>
+                <Box onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
+                  {descriptionExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </Box>
                 <Box display={{ xs: 'none', sm: 'block' }}>
                   <Box>
@@ -228,9 +237,6 @@ export default function ReviewPage(props) {
                             <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
                           </Grid>
                         </Grid>
-                        // <Typography>
-                        //   {review.book_info.price.toFixed(2)} {review.book_info.currency} @ <a rel="noopener noreferrer" target="_blank" href={review.book_info.links.infoLink}><ShopIcon /></a >
-                        // </Typography>
                         : <Typography>
                           Price Info Unavailable
                         </Typography>

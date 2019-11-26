@@ -98,9 +98,11 @@ export default function ReviewListItem(props) {
         <Grid container item xs={9} sm={10} spacing={1}>
           <Grid container item xs={12} direction="column">
             <Box width={0.9}>
-              <Typography variant="h6">
-                {title}
-              </Typography>
+              <Link to={`/review/${id}`} style={{ color: 'black', cursor: 'pointer' }}>
+                <Typography variant="h6">
+                  {title}
+                </Typography>
+              </Link>
             </Box>
             <Box>
               <Typography variant="subtitle2">
