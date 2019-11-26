@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Grid, Typography, Paper, makeStyles, Box, Collapse } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ChatBubble from '@material-ui/icons/ChatBubble';
@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 export default function BookmarkItem(props) {
   const classes = useStyles();
   const [reviewExpanded, setReviewExpanded] = useState(false);
-
+  const reviewEl = useRef(null);
   const { bookmark, user, unAddReviewBookmark, addReviewBookmark, bookmarkIndex } = props;
   const { book_info, review_text, bookmark_id, user_id, num_comments, user_info, tag_array, review_likes, upload_date, review_id } = bookmark;
   const { images, description, title, authors } = book_info;
@@ -81,8 +81,8 @@ export default function BookmarkItem(props) {
               <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
             </Link>
           </Grid>
-          <Grid container item spacing={1} justify="flex-start">
-            <Grid container item alignItems="center" style={{ width: 'auto', marginLeft: '.3rem' }}>
+          <Grid container item spacing={2} justify="center">
+            <Grid container item alignItems="center" style={{ width: 'auto' }}>
               <BookmarkIcon fontSize="small"/>
               <Typography component="span" variant="subtitle2">
                 {review_likes.length}
@@ -114,15 +114,19 @@ export default function BookmarkItem(props) {
               </Typography>
             </Box>
             <Box>
-              <Collapse className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
+              <Collapse ref={reviewEl} className={classes.collapseContainer} in={reviewExpanded} collapsedHeight="100px">
                 <Typography className={classes.reviewText}>
                   Review By: {`${user_info.first} ${user_info.last}`} - {moment.unix(upload_date).calendar()}<br /> {review_text}
                 </Typography>
               </Collapse>
             </Box>
-            <Box style={{ margin: 'auto' }} onClick={collapseReview}>
+            {!reviewEl.current ? <Box style={{ margin: 'auto' }} onClick={collapseReview}>
               {reviewExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Box>
+              : reviewEl.current.scrollHeight > 100 ? <Box style={{ margin: 'auto' }} onClick={collapseReview}>
+                {reviewExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Box> : undefined
+            }
           </Grid>
         </Grid>
         {
