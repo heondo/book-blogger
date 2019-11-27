@@ -80,16 +80,15 @@ export default function ReviewListItem(props) {
               <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
             </Link>
           </Grid>
-          <Grid container item spacing={2} justify="center">
-            <Grid container item alignItems="center" style={{ width: 'auto' }}>
+          <Grid container item spacing={1} justify="center">
+            <Grid container item alignItems="center" xs>
               <BookmarkIcon fontSize="small"/>
               <Typography component="span" variant="subtitle2">
-                {review_likes.length}
+                {review_likes.length || 0}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center"
-              style= {{ width: 'auto' }}>
-              <ChatBubble fontSize="small" style={{ marginRight: '.1rem' }}/>
+            <Grid container item alignItems="center" xs>
+              <ChatBubble fontSize="small"/>
               <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
               </Typography>
