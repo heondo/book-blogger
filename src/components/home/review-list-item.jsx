@@ -81,13 +81,13 @@ export default function ReviewListItem(props) {
             </Link>
           </Grid>
           <Grid container item spacing={1} justify="center">
-            <Grid container item alignItems="center" xs>
+            <Grid container item alignItems="center" justify="flex-end" xs>
               <BookmarkIcon fontSize="small"/>
               <Typography component="span" variant="subtitle2">
                 {review_likes.length || 0}
               </Typography>
             </Grid>
-            <Grid container item alignItems="center" xs>
+            <Grid container item spacing={1} alignItems="center" justify="flex-start" xs>
               <ChatBubble fontSize="small"/>
               <Typography component="span" variant="subtitle2">
                 {num_comments || 0}
