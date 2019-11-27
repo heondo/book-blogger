@@ -1,6 +1,7 @@
 # Book Blogger
 
-### In development...
+### In development...but you can view the live site below:
+book-blog.heondokim.com
 
 #### Languages
 * HTML5
