@@ -202,7 +202,7 @@ export default function UserSignUp(props) {
             </Button>
           </Grid>
           <Grid item>
-            <Button color="secondary" variant="contained">
+            <Button color="secondary" variant="contained" onClick={() => props.history.push('/')}>
               Cancel
             </Button>
           </Grid>
