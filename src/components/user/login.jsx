@@ -23,6 +23,7 @@ export default function Login(props) {
 
   const handleInputChange = e => {
     const { id, value } = e.target;
+    setLoginFailed(false);
     if (id === 'email') {
       setEmail(value);
       setValidEmail(true);

@@ -25,6 +25,8 @@ export default function UserSignUp(props) {
     confirmPasswordInput: true
   });
 
+  const [emailDuplicate, setEmailDuplicate] = useState(false);
+
   const verifyInputs = () => {
     let valid = true;
     const { firstInput, lastInput, emailInput, passwordInput, confirmPasswordInput } = inputs;
@@ -76,6 +78,7 @@ export default function UserSignUp(props) {
       .then(res => res.json())
       .then(res => {
         if (res.error === 'Email already taken') {
+          setEmailDuplicate(true);
           setValidInputs(prev => update(prev, {
             emailInput: { $set: false }
           }));
@@ -95,6 +98,9 @@ export default function UserSignUp(props) {
 
   const handleInputChange = event => {
     const { id, value } = event.target;
+    if (id === 'emailInput') {
+      setEmailDuplicate(false);
+    }
     const newInput = update(inputs, {
       [id]: { $set: value }
     });
@@ -156,7 +162,7 @@ export default function UserSignUp(props) {
               aria-describedby="emailInputText"
               onChange={handleInputChange}/>
             {!validInputs.emailInput ? (
-              <FormHelperText id="email-helper">Invalid email</FormHelperText>
+              <FormHelperText id="email-helper">{emailDuplicate ? 'Email already taken' : 'Invalid email'}</FormHelperText>
             ) : (
               <FormHelperText id="email-helper">We'll never share your email.</FormHelperText>
             )}
