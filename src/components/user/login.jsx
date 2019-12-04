@@ -33,7 +33,8 @@ export default function Login(props) {
     setValidPassword(true);
   };
 
-  const handleLogin = () => {
+  const handleLogin = e => {
+    e.preventDefault();
     if (!areFieldsFilled()) {
       return false;
     }
@@ -63,56 +64,58 @@ export default function Login(props) {
 
   return (
     <Container>
-      <Grid container item justify="center" xs={12} spacing={1} style={{ marginTop: '1rem' }}>
-        <Grid item xs={8}>
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel
-              htmlFor="email">Email address</InputLabel>
-            <Input
-              id="email"
-              required
-              error={!validEmail}
-              type="email"
-              aria-describedby="emailText"
-              onChange={handleInputChange}
-              style={{ width: '100%' }} />
-          </FormControl>
-        </Grid>
-        <Grid item xs={8}>
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel
-              htmlFor="password">Password</InputLabel>
-            <Input
-              id="password"
-              required
-              error={!validPassword}
-              type="password"
-              aria-describedby="passwordText"
-              style={{ width: '100%' }}
-              onChange={handleInputChange} />
-          </FormControl>
-        </Grid>
-        {loginFailed ? (
+      <form onSubmit={handleLogin} style={{ maxWidth: '800px', margin: 'auto' }}>
+        <Grid container item justify="center" xs={12} spacing={1} style={{ marginTop: '1rem' }}>
           <Grid item xs={8}>
-            <FormHelperText style={{ color: 'red' }}>
-            Login Failed
-            </FormHelperText>
-          </Grid>)
-          : undefined
-        }
-        <Grid container item xs={8} justify="flex-end" spacing={2}>
-          <Grid item>
-            <Button color="primary" variant="contained" onClick={handleLogin}>
-              Login
-            </Button>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel
+                htmlFor="email">Email address</InputLabel>
+              <Input
+                id="email"
+                required
+                error={!validEmail}
+                type="email"
+                aria-describedby="emailText"
+                onChange={handleInputChange}
+                style={{ width: '100%' }} />
+            </FormControl>
           </Grid>
-          <Grid item>
-            <Button color="secondary" variant="contained" onClick={() => props.history.push('/')}>
-              Cancel
-            </Button>
+          <Grid item xs={8}>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel
+                htmlFor="password">Password</InputLabel>
+              <Input
+                id="password"
+                required
+                error={!validPassword}
+                type="password"
+                aria-describedby="passwordText"
+                style={{ width: '100%' }}
+                onChange={handleInputChange} />
+            </FormControl>
+          </Grid>
+          {loginFailed ? (
+            <Grid item xs={8}>
+              <FormHelperText style={{ color: 'red' }}>
+                Login Failed
+              </FormHelperText>
+            </Grid>)
+            : undefined
+          }
+          <Grid container item xs={8} justify="flex-end" spacing={2}>
+            <Grid item>
+              <Button color="primary" variant="contained" onClick={handleLogin}>
+                Login
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button color="secondary" type="submit" variant="contained">
+                Cancel
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </form>
     </Container>
   );
 }

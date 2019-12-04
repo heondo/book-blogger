@@ -84,7 +84,7 @@ export default function Comments(props) {
             <Button variant="contained" color="primary" onClick={submitComment}>Submit</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="secondary" onClick={handleCancelComment}>Cancel</Button>
+            <Button variant="contained" color="secondary" onClick={handleCancelComment}>Clear</Button>
           </Grid>
         </Grid>
       </Grid>
