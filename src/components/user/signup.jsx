@@ -64,7 +64,8 @@ export default function UserSignUp(props) {
     return valid;
   };
 
-  const submitNewUser = () => {
+  const submitNewUser = e => {
+    e.preventDefault();
     if (!verifyInputs()) {
       return;
     }
@@ -116,98 +117,100 @@ export default function UserSignUp(props) {
 
   return (
     <Container style={{ display: 'flex', justifyContent: 'center' }}>
-      <Grid container item xs={8} spacing={1} className={classes.spacingNavFirst}>
-        <Grid item xs={6}>
-          <FormControl
-            style={{ width: '100%' }}>
-            <InputLabel
-              htmlFor="firstInput">First</InputLabel>
-            <Input
-              id="firstInput"
-              error={!validInputs.firstInput}
-              aria-describedby="firstNameInput"
-              width={1}
-              onChange={handleInputChange}/>
-            {!validInputs.firstInput ? (
-              <FormHelperText id="first-helper">Please enter a first name</FormHelperText>
-            ) : (
-              undefined
-            )}
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel htmlFor="lastInput">Last</InputLabel>
-            <Input
-              id="lastInput"
-              error={!validInputs.lastInput}
-              aria-describedby="lastNameInput"
-              onChange={handleInputChange}/>
-            {!validInputs.lastInput ? (
-              <FormHelperText id="last-helper">Please enter a last name</FormHelperText>
-            ) : (
-              undefined
-            )}
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl
-            style={{ width: '100%' }}>
-            <InputLabel
-              htmlFor="emailInput">Email address</InputLabel>
-            <Input
-              id="emailInput"
-              error={!validInputs.emailInput}
-              type="email"
-              aria-describedby="emailInputText"
-              onChange={handleInputChange}/>
-            {!validInputs.emailInput ? (
-              <FormHelperText id="email-helper">{emailDuplicate ? 'Email already taken' : 'Invalid email'}</FormHelperText>
-            ) : (
-              <FormHelperText id="email-helper">We'll never share your email.</FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel htmlFor="passwordInput">Password</InputLabel>
-            <Input id="passwordInput"
-              error={!validInputs.passwordInput}
-              aria-describedby="passwordInputText" type="password" onChange={handleInputChange}/>
-            {!validInputs.passwordInput ? (
-              <FormHelperText id="password-helper">Not long enough or no match</FormHelperText>
-            ) : (
-              undefined
-            )}
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel htmlFor="confirmPasswordInput">Confirm Password</InputLabel>
-            <Input id="confirmPasswordInput"
-              type="password"
-              error={!validInputs.confirmPasswordInput}
-              aria-describedby="confirmPasswordInputText" onChange={handleInputChange}/>
-            {!validInputs.confirmPasswordInput ? (
-              <FormHelperText id="confirm-password-helper">Password does not match</FormHelperText>
-            ) : (
-              undefined
-            )}
-          </FormControl>
-        </Grid>
-        <Grid container item xs={12} justify="flex-end" spacing={2}>
-          <Grid item>
-            <Button onClick={submitNewUser} color="primary" variant="contained">
-              Register
-            </Button>
+      <form onSubmit={submitNewUser}>
+        <Grid container item xs={8} spacing={1} className={classes.spacingNavFirst} style={{ margin: 'auto' }}>
+          <Grid item xs={6}>
+            <FormControl
+              style={{ width: '100%' }}>
+              <InputLabel
+                htmlFor="firstInput">First</InputLabel>
+              <Input
+                id="firstInput"
+                error={!validInputs.firstInput}
+                aria-describedby="firstNameInput"
+                width={1}
+                onChange={handleInputChange} />
+              {!validInputs.firstInput ? (
+                <FormHelperText id="first-helper">Please enter a first name</FormHelperText>
+              ) : (
+                undefined
+              )}
+            </FormControl>
           </Grid>
-          <Grid item>
-            <Button color="secondary" variant="contained" onClick={() => props.history.push('/')}>
-              Cancel
-            </Button>
+          <Grid item xs={6}>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel htmlFor="lastInput">Last</InputLabel>
+              <Input
+                id="lastInput"
+                error={!validInputs.lastInput}
+                aria-describedby="lastNameInput"
+                onChange={handleInputChange} />
+              {!validInputs.lastInput ? (
+                <FormHelperText id="last-helper">Please enter a last name</FormHelperText>
+              ) : (
+                undefined
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl
+              style={{ width: '100%' }}>
+              <InputLabel
+                htmlFor="emailInput">Email address</InputLabel>
+              <Input
+                id="emailInput"
+                error={!validInputs.emailInput}
+                type="email"
+                aria-describedby="emailInputText"
+                onChange={handleInputChange} />
+              {!validInputs.emailInput ? (
+                <FormHelperText id="email-helper">{emailDuplicate ? 'Email already taken' : 'Invalid email'}</FormHelperText>
+              ) : (
+                <FormHelperText id="email-helper">We'll never share your email.</FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel htmlFor="passwordInput">Password</InputLabel>
+              <Input id="passwordInput"
+                error={!validInputs.passwordInput}
+                aria-describedby="passwordInputText" type="password" onChange={handleInputChange} />
+              {!validInputs.passwordInput ? (
+                <FormHelperText id="password-helper">Not long enough or no match</FormHelperText>
+              ) : (
+                undefined
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel htmlFor="confirmPasswordInput">Confirm Password</InputLabel>
+              <Input id="confirmPasswordInput"
+                type="password"
+                error={!validInputs.confirmPasswordInput}
+                aria-describedby="confirmPasswordInputText" onChange={handleInputChange} />
+              {!validInputs.confirmPasswordInput ? (
+                <FormHelperText id="confirm-password-helper">Password does not match</FormHelperText>
+              ) : (
+                undefined
+              )}
+            </FormControl>
+          </Grid>
+          <Grid container item xs={12} justify="flex-end" spacing={2}>
+            <Grid item>
+              <Button onClick={submitNewUser} color="primary" variant="contained">
+                Register
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button color="secondary" variant="contained" type="submit">
+                Cancel
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </form>
     </Container>
   );
 }
