@@ -21,6 +21,8 @@
 
 Users can share, view, and save reviews on various books gathered from the Google Books API.
 
+![Book Blogger Add Review from Google API Demo](/demo/add-review.gif)
+
 Comment on reviews as a guest, or sign up and create your own review!
 
 Book information is collected from the API, with book tags that are autocompleted or created by the user.
