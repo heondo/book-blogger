@@ -78,7 +78,7 @@ export default function BookmarkItem(props) {
         <Grid container item xs={3} sm={2} spacing={1}direction="column">
           <Grid container item justify="center">
             <Link to={`/review/${review_id}`}>
-              <img className={classes.imageThumbnail} src={images.thumbnail} alt="there should be an image link here" />
+              <img className={classes.imageThumbnail} src={images.thumbnail.replace(/^http/, 'https')} alt="there should be an image link here" />
             </Link>
           </Grid>
           <Grid container item spacing={1} justify="center">
