@@ -6,7 +6,7 @@
 #### Languages
 * HTML5
 * CSS3
-* Javascript
+* JavaScript
 * SQL
 
 #### Libraries/Frameworks
