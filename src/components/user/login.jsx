@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Container, Grid, FormControl, InputLabel, Input, FormHelperText, Button } from '@material-ui/core';
 
 export default function Login(props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('guestuser@test.com');
+  const [password, setPassword] = useState('11111111');
   const [loginFailed, setLoginFailed] = useState(false);
   const [validEmail, setValidEmail] = useState(true);
   const [validPassword, setValidPassword] = useState(true);
