@@ -75,6 +75,7 @@ export default function Login(props) {
                 required
                 error={!validEmail}
                 type="email"
+                defaultValue="guestuser@test.com"
                 aria-describedby="emailText"
                 onChange={handleInputChange}
                 style={{ width: '100%' }} />
@@ -90,6 +91,7 @@ export default function Login(props) {
                 error={!validPassword}
                 type="password"
                 aria-describedby="passwordText"
+                defaultValue="11111111"
                 style={{ width: '100%' }}
                 onChange={handleInputChange} />
             </FormControl>
