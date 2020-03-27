@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, TextField, makeStyles, Grid, Typography, Chip, Button } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import googleKey from './../../../google_key.json';
+import googleKey from '../../../google_key.json';
 
 const useStyles = makeStyles(theme => ({
   autocomplete: {
